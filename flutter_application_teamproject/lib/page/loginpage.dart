@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_teamproject/page/registerpage.dart';
 import 'package:flutter_application_teamproject/page/welcomepage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -64,8 +65,12 @@ class _LoginPageState extends State<LoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [  SizedBox(height: 10,),
                           Image.asset("assets/images/pocketphamaw.png"),
-                          SizedBox(height: 20,),   
-                          Text("Email",style:TextStyle(fontSize: 20)),
+                          SizedBox(height: 20,),
+                          Wrap(children:[
+                            Icon(Icons.email),
+                            Text("  Email",style:TextStyle(fontSize: 20))
+                          ]
+                            ),                          
                           TextFormField(
                         validator: MultiValidator([
                           RequiredValidator(errorText: "Pls fill the form"),
@@ -78,7 +83,12 @@ class _LoginPageState extends State<LoginPage> {
                         },
                 ),
                 SizedBox(height: 15,),
-                Text("Password",style:TextStyle(fontSize: 20)),
+                Wrap(children:[
+                            Icon(Icons.usb),
+                            Text("  Password",style:TextStyle(fontSize: 20))
+                          ]
+                            )
+                ,
                 TextFormField(
                         validator: RequiredValidator(errorText: "Pls fill the correct password"),
                         obscureText: true,
@@ -93,9 +103,9 @@ class _LoginPageState extends State<LoginPage> {
                             width: 120,
                             height: 50,
                             child: ElevatedButton(
-                              child: Text("Sign in"),
+                            child: Text("Sign in"),
                         
-                              style: ElevatedButton.styleFrom(
+                            style: ElevatedButton.styleFrom(
                             primary: Colors.black,
                             shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0), 
@@ -132,15 +142,32 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                   ),
                 ),
-                Text("Don't have an account?"),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                  children :[  
+                    Text("Don't have an account?,",style: TextStyle(fontSize: 20),),
+                    TextButton(onPressed: (){
+                      Navigator.pushReplacement(
+                      context,MaterialPageRoute(builder: (context){
+                      return RegisterPage();
+                      })
+                    );
+                    }, child:Text("Sign up",style: 
+                    TextStyle(
+                      color: Colors.black,
+                      fontSize: 20),) 
+                      )         
+                  ]
+                )
+                ),
             ],
             ),
           )
           ),
                       ),
                     ),
-                      ),
-                   
+                      ),                 
                   ),
     );
         }
