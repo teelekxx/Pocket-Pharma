@@ -18,6 +18,23 @@ class _LoginPageState extends State<LoginPage> {
   Profile profile =Profile(email: '',password: '');
   final Future<FirebaseApp> firebase =Firebase.initializeApp();
   @override
+
+   OutlineInputBorder myfocusborder(){
+    return OutlineInputBorder(
+              borderRadius:  new BorderRadius.circular(10),
+              borderSide: BorderSide(color:Colors.black38,
+              width: 3)
+                           
+    );
+  }
+  OutlineInputBorder myinputborder(){
+    return OutlineInputBorder(
+              borderRadius:  new BorderRadius.circular(10),
+              borderSide: BorderSide(color:Colors.black38,
+              width: 3)
+                           
+    );
+  }
   Widget build(BuildContext context) {
    return  FutureBuilder(
       future:firebase,
@@ -35,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
         }
         if(snapshot.connectionState == ConnectionState.done){
            return Scaffold(
-                  appBar: AppBar(title: Text("LoginPage"), 
+                  appBar: AppBar(title: Text(""), 
                   backgroundColor: Colors.black,),
 
 
@@ -71,25 +88,40 @@ class _LoginPageState extends State<LoginPage> {
                             Text("  Email",style:TextStyle(fontSize: 20))
                           ]
                             ),                          
-                          TextFormField(
-                        validator: MultiValidator([
-                          RequiredValidator(errorText: "Pls fill the form"),
-                          EmailValidator(errorText: "Pls fill the correct email form"),
-                          ]         
+                          Container(
+                           
+                              child: TextFormField(
+                              decoration: InputDecoration(
+                                enabledBorder: myinputborder(),
+                                focusedBorder: myfocusborder(),
+                                border:InputBorder.none,
+                                hintText:"example@hotmail.com"),
+                               validator: MultiValidator([
+                              RequiredValidator(errorText: "Pls fill the form"),
+                              EmailValidator(errorText: "Pls fill the correct email form"),
+                              ]         
                         ),
                         keyboardType: TextInputType.emailAddress,
                         onSaved:(String? email){
-                          profile.email =email!;
+                              profile.email =email!;
                         },
+                        
                 ),
+                          
+                          ),
                 SizedBox(height: 15,),
                 Wrap(children:[
-                            Icon(Icons.usb),
+                            Icon(Icons.lock),
                             Text("  Password",style:TextStyle(fontSize: 20))
                           ]
                             )
                 ,
                 TextFormField(
+                    decoration: InputDecoration(
+                                enabledBorder: myinputborder(),
+                                focusedBorder: myfocusborder(),
+                                border:InputBorder.none,
+                                hintText:"**********"),
                         validator: RequiredValidator(errorText: "Pls fill the correct password"),
                         obscureText: true,
                          onSaved:(String? password){
@@ -103,8 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                             width: 120,
                             height: 50,
                             child: ElevatedButton(
-                            child: Text("Sign in"),
-                        
+                            child: Text("Sign in"),    
                             style: ElevatedButton.styleFrom(
                             primary: Colors.black,
                             shape: RoundedRectangleBorder(
