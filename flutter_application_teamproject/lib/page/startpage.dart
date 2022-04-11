@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                 Image.asset("assets/images/medicine.png",height: 70,),
                 Padding(
                   padding: const EdgeInsets.all(30),
-                  child: Text("The most worldwide medicine app that will provide the best soluton for customer"
+                  child: Text(":The most worldwide medicine app that will provide the best soluton for customer"
                   ,style: TextStyle(fontSize: 20,color: Colors.black),),
                 ),
                 // SizedBox(height: 10,),
