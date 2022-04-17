@@ -21,18 +21,27 @@ class _LoginPageState extends State<LoginPage> {
 
    OutlineInputBorder myfocusborder(){
     return OutlineInputBorder(
-              borderRadius:  new BorderRadius.circular(10),
-              borderSide: BorderSide(color:Colors.black38,
-              width: 3)
-                           
+              borderRadius:  new BorderRadius.circular(16),
+              borderSide:const  BorderSide(color:Colors.blue,
+              width: 3),
+                      
     );
   }
   OutlineInputBorder myinputborder(){
     return OutlineInputBorder(
-              borderRadius:  new BorderRadius.circular(10),
-              borderSide: BorderSide(color:Colors.black38,
+              borderRadius:  new BorderRadius.circular(16),
+              borderSide:const  BorderSide(color:Colors.black38,
               width: 3)
                            
+    );
+  }
+
+  OutlineInputBorder myerrorborder(){
+    return OutlineInputBorder(
+              borderRadius:  new BorderRadius.circular(16),
+              borderSide:const  BorderSide(color:Colors.red,
+              width: 3)
+         
     );
   }
   Widget build(BuildContext context) {
@@ -91,14 +100,17 @@ class _LoginPageState extends State<LoginPage> {
                           Container(
                            
                               child: TextFormField(
+                               
                               decoration: InputDecoration(
-                                enabledBorder: myinputborder(),
-                                focusedBorder: myfocusborder(),
-                                border:InputBorder.none,
-                                hintText:"example@hotmail.com"),
-                               validator: MultiValidator([
-                              RequiredValidator(errorText: "Pls fill the form"),
-                              EmailValidator(errorText: "Pls fill the correct email form"),
+                              enabledBorder: myinputborder(),
+                              focusedBorder: myfocusborder(),
+                              focusedErrorBorder: myerrorborder(),
+                             
+                              border:InputBorder.none,
+                              hintText:"example@hotmail.com"),
+                              validator: MultiValidator([
+                              RequiredValidator(errorText: "Please fill the form"),
+                              EmailValidator(errorText: "Please fill the correct email form"),
                               ]         
                         ),
                         keyboardType: TextInputType.emailAddress,
@@ -120,10 +132,12 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: InputDecoration(
                                 enabledBorder: myinputborder(),
                                 focusedBorder: myfocusborder(),
+                                focusedErrorBorder: myerrorborder(),
+                                
                                 border:InputBorder.none,
                                 hintText:"**********"),
-                        validator: RequiredValidator(errorText: "Pls fill the correct password"),
-                        obscureText: true,
+                                validator: RequiredValidator(errorText: "Please fill the correct password"),
+                                obscureText: true,
                          onSaved:(String? password){
                           profile.password = password!;
                         },
@@ -142,8 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(18.0), 
                             side: BorderSide(color: Colors.black87)                          
   )
-),  
-                              
+),              
                               onPressed: () async{
                                   if(formkey.currentState!.validate()){
                                       formkey.currentState?.save();
@@ -161,15 +174,15 @@ class _LoginPageState extends State<LoginPage> {
                                          });
                                     
                                     }on FirebaseAuthException catch(e){
-                                      //  print(e.message);
-                                      //  print(e.code);
                                         Fluttertoast.showToast(
                                         msg: e.message!,
                                         gravity: ToastGravity.CENTER
                                       );
                                     }
                                   }   
-                              },)
+                              },
+                              
+                              )
                             ),
                   ),
                 ),

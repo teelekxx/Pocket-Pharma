@@ -63,7 +63,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 SizedBox(height: 15,),
                 Text("password",style:TextStyle(fontSize: 20)),
                 TextFormField(
-                  validator: RequiredValidator(errorText: "Pls fill the correct password"),
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: "Pls fill the correct password"),
+                    MaxLengthValidator(8, errorText: "can't  create more than 8")]
+                    ),
                   obscureText: true,
                    onSaved:(String? password){
                     profile.password = password!;
