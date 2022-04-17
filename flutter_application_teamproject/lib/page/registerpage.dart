@@ -220,7 +220,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                           color: Colors.red, width: 3),
                                       borderRadius: BorderRadius.circular(10),
                                     )),
-                                obscureText: true,
                               ),
                               SizedBox(
                                 height: 15,
@@ -254,7 +253,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                           color: Colors.red, width: 3),
                                       borderRadius: BorderRadius.circular(10),
                                     )),
-                                obscureText: true,
                               ),
                               SizedBox(
                                 height: 15,
