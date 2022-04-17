@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                                       focusedErrorBorder: myfocuserrorborder(),
                                       errorBorder: myerrorborder(),
                                       border: InputBorder.none,
-                                      hintText: "**********"),
+                                      hintText: "***********"),
                                   validator: RequiredValidator(
                                       errorText:
                                           "Please fill the correct password"),
