@@ -261,41 +261,53 @@ class _RegisterPageState extends State<RegisterPage> {
                               SizedBox(
                                 height: 15,
                               ),
-                              SizedBox(
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.black,
-                                    ),
-                                    child: Text("Sign Up"),
-                                    onPressed: () async {
-                                      if (formkey.currentState!.validate()) {
-                                        formkey.currentState?.save();
-                                        try {
-                                          await FirebaseAuth.instance
-                                              .createUserWithEmailAndPassword(
-                                                  email: profile.email,
-                                                  password: profile.password);
-                                          Fluttertoast.showToast(
-                                              msg:
-                                                  "Create account Successfully",
-                                              gravity: ToastGravity.TOP);
-                                          formkey.currentState?.reset();
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return HomePage();
-                                          }));
-                                        } on FirebaseAuthException catch (e) {
-                                          //  print(e.message);
-                                          //  print(e.code);
-                                          Fluttertoast.showToast(
-                                              msg: e.message!,
-                                              gravity: ToastGravity.CENTER);
-                                        }
-                                      }
-                                    },
-                                  ))
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: SizedBox(
+                                      width: 120,
+                                      height: 50,
+                                      child: ElevatedButton(
+                                        child: Text("Sign in"),
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.black,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0),
+                                                side: BorderSide(
+                                                    color: Colors.black87))),
+                                        onPressed: () async {
+                                          if (formkey.currentState!
+                                              .validate()) {
+                                            formkey.currentState?.save();
+                                            try {
+                                              await FirebaseAuth.instance
+                                                  .createUserWithEmailAndPassword(
+                                                      email: profile.email,
+                                                      password:
+                                                          profile.password);
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Create account Successfully",
+                                                  gravity: ToastGravity.TOP);
+                                              formkey.currentState?.reset();
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return HomePage();
+                                              }));
+                                            } on FirebaseAuthException catch (e) {
+                                              //  print(e.message);
+                                              //  print(e.code);
+                                              Fluttertoast.showToast(
+                                                  msg: e.message!,
+                                                  gravity: ToastGravity.CENTER);
+                                            }
+                                          }
+                                        },
+                                      )),
+                                ),
+                              ),
                             ],
                           ),
                         )),
