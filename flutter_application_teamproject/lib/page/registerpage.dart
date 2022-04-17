@@ -196,7 +196,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                 height: 5,
                               ),
                               TextFormField(
-                                controller: _pass,
                                 validator: RequiredValidator(
                                     errorText: "Please fill this form"),
                                 decoration: InputDecoration(
@@ -231,7 +230,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                 height: 5,
                               ),
                               TextFormField(
-                                controller: _pass,
                                 validator: RequiredValidator(
                                     errorText: "Please fill this form"),
                                 decoration: InputDecoration(
