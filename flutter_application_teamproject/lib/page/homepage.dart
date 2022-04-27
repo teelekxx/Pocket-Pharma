@@ -13,10 +13,14 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final auth = FirebaseAuth.instance;
+  final uid = FirebaseAuth.instance.currentUser?.uid;
+  // final uid = FirebaseAuth.instance.currentUser?.uid;
+
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
+    print(uid);
     return Padding(
         padding: const EdgeInsets.all(0.0),
         child: Center(
@@ -125,8 +129,7 @@ class _MainPageState extends State<MainPage> {
                                                             (String? val) {
                                                           setState(
                                                             () {
-                                                              String?
-                                                                  _dropDownValue =
+                                                              _dropDownValue =
                                                                   val;
                                                             },
                                                           );
@@ -151,7 +154,17 @@ class _MainPageState extends State<MainPage> {
                                                                     color: Colors
                                                                         .black87))),
                                                         onPressed: () {
-                                                          print("Appointed");
+                                                          FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'appointment')
+                                                              .add({
+                                                            'created':
+                                                                _dropDownValue,
+                                                            'owner': uid
+                                                          });
+                                                          Navigator.pop(
+                                                              context, true);
                                                         })),
                                               )
                                             ],
