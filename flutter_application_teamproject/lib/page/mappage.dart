@@ -204,8 +204,8 @@ class _MapPageState extends State<MapPage> {
                           child:FittedBox(child: Icon(Icons.place)
                           ,)
                         ),
-                        title:Text(document["name"]+document["fsurname"]),
-                        subtitle: Text(document["email"]+" Km:" +document["score"]),
+                       title: Text(document["name"] + document["fsurname"]),
+                      subtitle:Text(document["email"] + " Km:" + document["score"]),
                         contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
                         // onTap: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>HomePage()));},
                       ),
