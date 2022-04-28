@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_teamproject/data/menu_items.dart';
 import 'package:flutter_application_teamproject/model/meun_item.dart';
 import 'package:flutter_application_teamproject/page/chatpage.dart';
-import 'package:flutter_application_teamproject/page/home.dart';
+// import 'package:flutter_application_teamproject/page/home.dart';
 import 'package:flutter_application_teamproject/page/homepage.dart';
 import 'package:flutter_application_teamproject/page/mappage.dart';
 import 'package:flutter_application_teamproject/page/profilepage.dart';
@@ -22,7 +22,7 @@ class _WelcomePageState extends State<WelcomePage> {
   final screen =[
     MainPage(),
     MapPage(),  
-    ChatPage(),
+    AppointmentPage(),
     ProfilePage(),
   ];
 

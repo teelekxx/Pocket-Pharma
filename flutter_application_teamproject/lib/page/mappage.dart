@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_teamproject/model/place.dart';
+// import 'package:flutter_application_teamproject/model/place.dart';
 import 'package:flutter_application_teamproject/page/startpage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -37,7 +37,7 @@ class _MapPageState extends State<MapPage> {
     super.initState();
     // showDestination();
     findLatLng();  
-    getplacesource();
+    // getplacesource();
   }
    Future<Null> findLatLng() async{
     LocationData? locationData = await findLocationData();
@@ -133,22 +133,22 @@ class _MapPageState extends State<MapPage> {
   }
 
 
-  void getplacesource(){
-    _destinationCollection.doc().get().then((snapshot)
-    {
-      setState(() {
-        placecollection.addAll([
-          Place(
-            fname: snapshot["name"],
-            fsurname: snapshot["fsurname"],
-            email: snapshot["email"],
-            password: snapshot["password"]
-          )]
-        );
-        print(placecollection);
-      });
-    });
-  }
+  // void getplacesource(){
+  //   _destinationCollection.doc().get().then((snapshot)
+  //   {
+  //     setState(() {
+  //       placecollection.addAll([
+  //         Place(
+  //           fname: snapshot["name"],
+  //           fsurname: snapshot["fsurname"],
+  //           email: snapshot["email"],
+  //           password: snapshot["password"]
+  //         )]
+  //       );
+  //       print(placecollection);
+  //     });
+  //   });
+  // }
 
 
 
@@ -160,7 +160,7 @@ class _MapPageState extends State<MapPage> {
 
   Widget _buildList(){
     return Container(
-      height: 300,
+      height: 250,
       width: 500,
       child: StreamBuilder(
           stream:FirebaseFirestore.instance.collection("destination").snapshots(),
