@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_application_teamproject/model/place.dart';
 import 'package:flutter_application_teamproject/page/startpage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 
 
@@ -20,6 +21,7 @@ class _MapPageState extends State<MapPage> {
   late GoogleMapController mapController;
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   CollectionReference _destinationCollection = FirebaseFirestore.instance.collection("destination");
+  String distanceString ="";
   // final List<Place> places =[
   //   Place(fname: "Peem_opas",fsurname: "Opas",email: "Peem_opas@hptmail.com",password: "1234"),
   //   Place(fname: "Cream",fsurname: "Worada",email: "Cream@hptmail.com",password: "5555"),
@@ -59,7 +61,9 @@ class _MapPageState extends State<MapPage> {
         c((lat2 - lat1) * p) / 2 +
         c(lat1 * p) * c(lat2 * p) * (1 - c((lng2 - lng1) * p)) / 2;
     distance = 12742 * asin(sqrt(a));
-
+     
+    var myformat =NumberFormat('#0.0#','en_us');
+    distanceString =myformat.format(distance);
     return distance;
   }
 
@@ -89,7 +93,7 @@ class _MapPageState extends State<MapPage> {
               final latLng = LatLng(location.latitude, location.longitude); 
               distance = calculateDistance(lat, lng, location.latitude, location.longitude);
               print("Distance $i : $distance");        
-              _destinationCollection.doc('Test${i+1}').update({"distance":distance}); 
+              _destinationCollection.doc('Test${i+1}').update({"distance":distanceString}); 
               markers.add(Marker(markerId: MarkerId("location $i"),  
               position: latLng,
               infoWindow: InfoWindow(
@@ -205,7 +209,7 @@ class _MapPageState extends State<MapPage> {
                           ,)
                         ),
                        title: Text(document["name"] + document["fsurname"]),
-                      subtitle:Text(document["email"] + " Km:" + document["score"]),
+                      subtitle:Text(" Distance:" + document["distance"].toString()+" km"),
                         contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
                         // onTap: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>HomePage()));},
                       ),
