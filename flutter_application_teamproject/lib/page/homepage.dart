@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_teamproject/page/startpage.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -17,10 +18,102 @@ class _MainPageState extends State<MainPage> {
   // final uid = FirebaseAuth.instance.currentUser?.uid;
 
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+  var textController = TextEditingController();
+
+  DateTime join(DateTime date, TimeOfDay time) {
+    return new DateTime(
+        date.year, date.month, date.day, time.hour, time.minute);
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? timeOfDay = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+      initialEntryMode: TimePickerEntryMode.dial,
+    );
+    if (timeOfDay != null && timeOfDay != selectedTime) {
+      setState(() {
+        selectedTime = timeOfDay;
+        selectedDate = join(selectedDate, selectedTime);
+        FirebaseFirestore.instance.collection('appointment').add({
+          'created': selectedDate,
+          'owner': uid,
+          'text': textController.text
+        });
+        Fluttertoast.showToast(
+            msg: "Appointed!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        Navigator.of(context, rootNavigator: true).pop();
+      });
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        _selectTime(context);
+      });
+    }
+  }
+
+  Future<void> _appointment(BuildContext context) async {
+    final String? des = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: const EdgeInsets.fromLTRB(50.0, 200.0, 50.0, 50.0),
+              content: Container(
+                  width: double.maxFinite,
+                  child: ListView(children: [
+                    Text("Please tell us about yourself",
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold)),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                      controller: textController,
+                      decoration: InputDecoration(
+                        hintText: 'Type here....',
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: 8,
+                      minLines: 1,
+                    ),
+                    SizedBox(
+                      height: 350,
+                    ),
+                    SizedBox(
+                        width: 100,
+                        height: 50,
+                        child: ElevatedButton(
+                            child: Text("Next"),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: Colors.black87))),
+                            onPressed: () {
+                              _selectDate(context);
+                            }))
+                  ])));
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(uid);
     return Padding(
         padding: const EdgeInsets.all(0.0),
         child: Center(
@@ -62,26 +155,7 @@ class _MainPageState extends State<MainPage> {
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        List<String> _locations = [
-                                          '9:00 - 10:00',
-                                          '11:00 - 12:00',
-                                          '13:00 - 14:00',
-                                          '15:00 - 16:00',
-                                          '17:00 - 18:00'
-                                        ];
-                                        var available =
-                                            document["availability"];
-                                        var index = 0;
-                                        for (bool i in available) {
-                                          if (i == false) {
-                                            _locations[index] = "none";
-                                          }
-                                          index += 1;
-                                        }
-                                        List<String> filtered = _locations
-                                            .where((item) => item != "none")
-                                            .toList();
-                                        String? _dropDownValue = filtered[0];
+                                        DateTime showDate = selectedDate;
                                         return AlertDialog(
                                           insetPadding:
                                               const EdgeInsets.symmetric(
@@ -105,40 +179,10 @@ class _MainPageState extends State<MainPage> {
                                                   alignment: Alignment.center,
                                                   child: Text(document["des"])),
                                               Align(
-                                                  alignment:
-                                                      Alignment.bottomRight,
-                                                  child: Container(
-                                                      width: 100,
-                                                      child:
-                                                          DropdownButtonFormField(
-                                                        value: _dropDownValue,
-                                                        isExpanded: true,
-                                                        iconSize: 30.0,
-                                                        style: TextStyle(
-                                                            color: Colors.blue),
-                                                        items: filtered.map(
-                                                          (val) {
-                                                            return DropdownMenuItem<
-                                                                String>(
-                                                              value: val,
-                                                              child: Text(val),
-                                                            );
-                                                          },
-                                                        ).toList(),
-                                                        onChanged:
-                                                            (String? val) {
-                                                          setState(
-                                                            () {
-                                                              _dropDownValue =
-                                                                  val;
-                                                            },
-                                                          );
-                                                        },
-                                                      ))),
-                                              Align(
-                                                alignment: Alignment.bottomLeft,
+                                                alignment:
+                                                    Alignment.bottomCenter,
                                                 child: SizedBox(
-                                                    width: 120,
+                                                    width: 100,
                                                     height: 50,
                                                     child: ElevatedButton(
                                                         child: Text("Appoint"),
@@ -154,17 +198,8 @@ class _MainPageState extends State<MainPage> {
                                                                     color: Colors
                                                                         .black87))),
                                                         onPressed: () {
-                                                          FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'appointment')
-                                                              .add({
-                                                            'created':
-                                                                _dropDownValue,
-                                                            'owner': uid
-                                                          });
-                                                          Navigator.pop(
-                                                              context, true);
+                                                          _appointment(context);
+                                                          // _selectDate(context);
                                                         })),
                                               )
                                             ],
