@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +33,7 @@ class _MapPageState extends State<MapPage> {
 
   var placecollection = [];
   Set<Marker> markers = Set();
-  double lat=0,lng=0;
+  double lat=0,lng=0 ,distance =0;
   var data;
   void initState() {
     super.initState();
@@ -48,18 +50,18 @@ class _MapPageState extends State<MapPage> {
     print("Hi lat =${lat}, lng =${lng}");
   }
 
-  //   double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
-//     double distance = 0;
+  double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
+    double distance = 0;
 
-//     var p = 0.017453292519943295;
-//     var c = cos;
-//     var a = 0.5 -
-//         c((lat2 - lat1) * p) / 2 +
-//         c(lat1 * p) * c(lat2 * p) * (1 - c((lng2 - lng1) * p)) / 2;
-//     distance = 12742 * asin(sqrt(a));
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lng2 - lng1) * p)) / 2;
+    distance = 12742 * asin(sqrt(a));
 
-//     return distance;
-//   }
+    return distance;
+  }
 
   Future<LocationData?> findLocationData() async{
     Location location =Location();
@@ -82,18 +84,23 @@ class _MapPageState extends State<MapPage> {
         stream: FirebaseFirestore.instance.collection("Location").snapshots(),
         builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> locationsnapshot) {
           if (locationsnapshot.hasData) {
-            for(int i =0 ;i<locationsnapshot.data!.docs.length;i++){
+                       for(int i =0 ;i<locationsnapshot.data!.docs.length;i++){
               GeoPoint location = locationsnapshot.data?.docs[i]['location'];
-              final latLng = LatLng(location.latitude, location.longitude);
-               markers.add(Marker(markerId: MarkerId("location $i"),  position: latLng,
-               infoWindow: InfoWindow(
+              final latLng = LatLng(location.latitude, location.longitude); 
+              distance = calculateDistance(lat, lng, location.latitude, location.longitude);
+              print("Distance $i : $distance");        
+              _destinationCollection.doc('Test${i+1}').update({"distance":distance}); 
+              markers.add(Marker(markerId: MarkerId("location $i"),  
+              position: latLng,
+              infoWindow: InfoWindow(
                  title:"Pharmacy Store ${i+1}"
                ,snippet:'Doctor Name: ${i+1}' )));
-                  _googleMapController?.animateCamera(CameraUpdate.newCameraPosition(
+              _googleMapController?.animateCamera(CameraUpdate.newCameraPosition(
               CameraPosition(
                 target: latLng,
                 zoom: 10.0
-              ),
+              ),  
+   
 
             )
           );
