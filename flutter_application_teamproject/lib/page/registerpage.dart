@@ -17,6 +17,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
   Profile profile = Profile(email: '', password: '');
+  String fname = "";
+  String lname = "";
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
 
   Widget build(BuildContext context) {
@@ -220,6 +222,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                           color: Colors.red, width: 3),
                                       borderRadius: BorderRadius.circular(10),
                                     )),
+                                onSaved: (String? iname) {
+                                  fname = iname!;
+                                },
                               ),
                               SizedBox(
                                 height: 15,
@@ -253,6 +258,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                           color: Colors.red, width: 3),
                                       borderRadius: BorderRadius.circular(10),
                                     )),
+                                onSaved: (String? iname) {
+                                  lname = iname!;
+                                },
                               ),
                               SizedBox(
                                 height: 15,
@@ -277,11 +285,17 @@ class _RegisterPageState extends State<RegisterPage> {
                                               .validate()) {
                                             formkey.currentState?.save();
                                             try {
-                                              await FirebaseAuth.instance
-                                                  .createUserWithEmailAndPassword(
-                                                      email: profile.email,
-                                                      password:
-                                                          profile.password);
+                                              String? name =
+                                                  fname + " " + lname;
+                                              UserCredential result =
+                                                  await FirebaseAuth
+                                                      .instance
+                                                      .createUserWithEmailAndPassword(
+                                                          email: profile.email,
+                                                          password:
+                                                              profile.password);
+                                              User? user = result.user;
+                                              user?.updateDisplayName(name);
                                               Fluttertoast.showToast(
                                                   msg:
                                                       "Create account Successfully",
