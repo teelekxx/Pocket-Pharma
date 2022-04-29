@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_teamproject/data/menu_items.dart';
@@ -17,9 +16,9 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   final auth = FirebaseAuth.instance;
-  int index =0;
+  int index = 0;
 
-  final screen =[
+  final screen = [
     MainPage(),
     MapPage(),  
     AppointmentPage(),
@@ -28,38 +27,37 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AppBar(title: Text("Welcompage"),
-      
-      actions: [ 
-        // IconButton(icon: Icon(Icons.search),onPressed: (){
-        //   showSearch(context: context, delegate: MySearchDelegate());
-        // }) ,
-        PopupMenuButton<MenuItem>(
-          onSelected: (item)=>onSelected(context,item),
-          itemBuilder: (context)=>[
-           ...MenuItems.itemFirst.map(buildItem).toList(),  
-           PopupMenuDivider(),
-           ...MenuItems.itemSecond.map(buildItem).toList(),  
-        ],     
-        )
-      ],
-      backgroundColor: Colors.black,
-      ),
-      body:screen[index],
-      bottomNavigationBar:
-      NavigationBarTheme(
-        data: NavigationBarThemeData(
-          indicatorColor: Colors.white,
-        
-          labelTextStyle: MaterialStateProperty.all(
-            TextStyle(fontSize: 14,fontWeight:FontWeight.w500,color: Colors.white)
-            ),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Welcompage"),
+          actions: [
+            // IconButton(icon: Icon(Icons.search),onPressed: (){
+            //   showSearch(context: context, delegate: MySearchDelegate());
+            // }) ,
+            PopupMenuButton<MenuItem>(
+              onSelected: (item) => onSelected(context, item),
+              itemBuilder: (context) => [
+                ...MenuItems.itemFirst.map(buildItem).toList(),
+                PopupMenuDivider(),
+                ...MenuItems.itemSecond.map(buildItem).toList(),
+              ],
+            )
+          ],
+          backgroundColor: Colors.black,
+        ),
+        body: screen[index],
+        bottomNavigationBar: NavigationBarTheme(
+          data: NavigationBarThemeData(
+            indicatorColor: Colors.white,
+            labelTextStyle: MaterialStateProperty.all(TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.white)),
           ),
-        child: navigatorbar(),)
-
-    );
+          child: navigatorbar(),
+        ));
   }
+
 
 NavigationBar navigatorbar(){
   return NavigationBar(
@@ -102,39 +100,39 @@ NavigationBar navigatorbar(){
     ],)
     );
 
-  void onSelected(BuildContext context,MenuItem item){
-    switch (item){
+  void onSelected(BuildContext context, MenuItem item) {
+    switch (item) {
       case MenuItems.itemSetting:
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context)=> ProfilePage())
-          );
-          break;
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ProfilePage()));
+        break;
       case MenuItems.itemSignout:
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context)=> HomePage())
-          );
-          break;
-      
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => HomePage()));
+        break;
     }
   }
 }
-class MySearchDelegate extends SearchDelegate{
+
+class MySearchDelegate extends SearchDelegate {
   @override
-  List<Widget> buildActions(BuildContext context) => [IconButton(icon: Icon(Icons.clear), 
-  onPressed:(){
-       if(query.isEmpty){
-      close(context, null);
-    }
-    else{
-      query='';
-    }
-  }
-  )];
+  List<Widget> buildActions(BuildContext context) => [
+        IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: () {
+              if (query.isEmpty) {
+                close(context, null);
+              } else {
+                query = '';
+              }
+            })
+      ];
   @override
-  Widget buildLeading(BuildContext context) => IconButton(icon: Icon(Icons.arrow_back), 
-  onPressed:(){
-      close(context, null); 
-  });
+  Widget buildLeading(BuildContext context) => IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      });
   @override
   Widget buildSuggestions(BuildContext context) => Text("Suggestions go here");
   @override

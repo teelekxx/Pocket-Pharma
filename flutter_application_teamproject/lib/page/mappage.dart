@@ -4,13 +4,10 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_application_teamproject/model/place.dart';
 import 'package:flutter_application_teamproject/page/startpage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
-
-
 
 class MapPage extends StatefulWidget {
   @override
@@ -21,9 +18,10 @@ class _MapPageState extends State<MapPage> {
   static GoogleMapController? _googleMapController;
   late GoogleMapController mapController;
   String query ="";
+  String distanceString="";
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
-  CollectionReference _destinationCollection = FirebaseFirestore.instance.collection("destination");
-  String distanceString ="";
+  CollectionReference _destinationCollection =
+      FirebaseFirestore.instance.collection("destination");
   // final List<Place> places =[
   //   Place(fname: "Peem_opas",fsurname: "Opas",email: "Peem_opas@hptmail.com",password: "1234"),
   //   Place(fname: "Cream",fsurname: "Worada",email: "Cream@hptmail.com",password: "5555"),
@@ -40,7 +38,8 @@ class _MapPageState extends State<MapPage> {
    
     // getplacesource();
   }
-   Future<Null> findLatLng() async{
+
+  Future<Null> findLatLng() async {
     LocationData? locationData = await findLocationData();
     setState(() {
       lat = locationData!.latitude!;
@@ -68,22 +67,24 @@ class _MapPageState extends State<MapPage> {
     Location location =Location();
     try{
       return location.getLocation();
-    }catch(e){
+    } catch (e) {
       return null;
     }
   }
 
-  Widget showMapProgress(){
-    return Center(child: CircularProgressIndicator(),);
+  Widget showMapProgress() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection("Location").snapshots(),
-        builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> locationsnapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<QuerySnapshot> locationsnapshot) {
           if (locationsnapshot.hasData) {
               for(int i =0 ;i<locationsnapshot.data!.docs.length;i++){
               String doctorName =locationsnapshot.data?.docs[i]['doctorName'];
@@ -110,43 +111,43 @@ class _MapPageState extends State<MapPage> {
           );
 
             }
-      return FutureBuilder(
-      future: firebase,
-      builder: (context,snapshot){
-        if (!snapshot.hasData){
-           return Text("Got no data :(");
-        }
-        if(snapshot.hasError){
-          return Scaffold(
-            appBar:AppBar(title:Text("error")),
-            body:Center(child: Text("${snapshot.error}"),)
-          );
-        }
-        if(snapshot.hasData &&
-              snapshot.connectionState == ConnectionState.done){
-          print("connect successfully");
-          return SingleChildScrollView(
-          child: Column(
-            children: [  if(lat ==0)...[
-                showMapProgress(),
-            ] 
-          else...[
-            showMap(),    
-            saveButton(),
-            _buildList() 
-          ]         
-        // lat == 0 ? showMapProgress() : 
-        // showMap(),    
-        // saveButton(),
-          ],
-          ),
-    );
-        }
-        return Scaffold(
-          body: Center(child: CircularProgressIndicator())
-          ,);
-      }
-      );
+            return FutureBuilder(
+                future: firebase,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Text("Got no data :(");
+                  }
+                  if (snapshot.hasError) {
+                    return Scaffold(
+                        appBar: AppBar(title: Text("error")),
+                        body: Center(
+                          child: Text("${snapshot.error}"),
+                        ));
+                  }
+                  if (snapshot.hasData &&
+                      snapshot.connectionState == ConnectionState.done) {
+                    print("connect successfully");
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          if (lat == 0) ...[
+                            showMapProgress(),
+                          ] else ...[
+                            showMap(),
+                            saveButton(),
+                            _buildList()
+                          ]
+                          // lat == 0 ? showMapProgress() :
+                          // showMap(),
+                          // saveButton(),
+                        ],
+                      ),
+                    );
+                  }
+                  return Scaffold(
+                    body: Center(child: CircularProgressIndicator()),
+                  );
+                });
           }
           return Center(
             child: CircularProgressIndicator(),
@@ -155,7 +156,6 @@ class _MapPageState extends State<MapPage> {
       ),
     );
   }
-
 
   // void getplacesource(){
   //   _destinationCollection.doc().get().then((snapshot)
@@ -298,10 +298,10 @@ class _MapPageState extends State<MapPage> {
   //                 ),
   //         SizedBox(height:10 ),
   //       ],
-  //     ),            
+  //     ),
   //     );
   //   }
-                 
+
   Widget saveButton() {
     //  final _textcontroller =TextEditingController(text: "");
     return Container
@@ -359,20 +359,21 @@ class _MapPageState extends State<MapPage> {
    mapController =controller;
   }
 
-  Widget showMap() { 
-    LatLng latlng =LatLng(lat, lng);
-    CameraPosition cameraPosition =CameraPosition(
+  Widget showMap() {
+    LatLng latlng = LatLng(lat, lng);
+    CameraPosition cameraPosition = CameraPosition(
       target: latlng,
-      zoom: 14.0,);
+      zoom: 14.0,
+    );
     return Container(
       margin: const EdgeInsets.all(16),
-        height: 250,
-        child: GoogleMap(
-          initialCameraPosition: cameraPosition,
-          mapType: MapType.normal,
-          onMapCreated: _onMapCreated,
-          markers: markers,   
-          ),
-      );
+      height: 250,
+      child: GoogleMap(
+        initialCameraPosition: cameraPosition,
+        mapType: MapType.normal,
+        onMapCreated: _onMapCreated,
+        markers: markers,
+      ),
+    );
   }
 }
