@@ -25,6 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+
     final users = UserPreferences.getUser();
 
     return Scaffold(
@@ -50,6 +51,11 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 48),
           DescriptionWidget(),
         ],
+
+    return Center(
+      child: Container(
+        child: Text("This is Profile Page"),
+
       ),
     );
   }
