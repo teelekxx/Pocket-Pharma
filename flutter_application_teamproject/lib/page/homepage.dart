@@ -21,6 +21,7 @@ class _MainPageState extends State<MainPage> {
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+  String selectedDoctor = "";
   var textController = TextEditingController();
 
   DateTime join(DateTime date, TimeOfDay time) {
@@ -41,7 +42,8 @@ class _MainPageState extends State<MainPage> {
         FirebaseFirestore.instance.collection('appointment').add({
           'created': selectedDate,
           'owner': uid,
-          'text': textController.text
+          'text': textController.text,
+          'ownerName': selectedDoctor,
         });
         Fluttertoast.showToast(
             msg: "Appointed!",
@@ -200,6 +202,8 @@ class _MainPageState extends State<MainPage> {
                                                                     color: Colors
                                                                         .black87))),
                                                         onPressed: () {
+                                                          selectedDoctor =
+                                                              document["name"];
                                                           _appointment(context);
                                                           // _selectDate(context);
                                                         })),
