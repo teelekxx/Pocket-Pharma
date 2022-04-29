@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,6 +20,7 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   static GoogleMapController? _googleMapController;
   late GoogleMapController mapController;
+  String query ="";
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   CollectionReference _destinationCollection = FirebaseFirestore.instance.collection("destination");
   String distanceString ="";
@@ -26,14 +28,8 @@ class _MapPageState extends State<MapPage> {
   //   Place(fname: "Peem_opas",fsurname: "Opas",email: "Peem_opas@hptmail.com",password: "1234"),
   //   Place(fname: "Cream",fsurname: "Worada",email: "Cream@hptmail.com",password: "5555"),
   // ];
-
-  final List<String> namesss = <String>
-[
-  "Peem","Opas","cream"
-];
-
-
-  var placecollection = [];
+  Completer<GoogleMapController> _controller =Completer();
+  final _textcontroller =TextEditingController(text: "");
   Set<Marker> markers = Set();
   double lat=0,lng=0 ,distance =0;
   var data;
@@ -41,6 +37,7 @@ class _MapPageState extends State<MapPage> {
     super.initState();
     // showDestination();
     findLatLng();  
+   
     // getplacesource();
   }
    Future<Null> findLatLng() async{
@@ -88,7 +85,9 @@ class _MapPageState extends State<MapPage> {
         stream: FirebaseFirestore.instance.collection("Location").snapshots(),
         builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> locationsnapshot) {
           if (locationsnapshot.hasData) {
-                       for(int i =0 ;i<locationsnapshot.data!.docs.length;i++){
+              for(int i =0 ;i<locationsnapshot.data!.docs.length;i++){
+              String doctorName =locationsnapshot.data?.docs[i]['doctorName'];
+              String storeName =locationsnapshot.data?.docs[i]['storeName'];
               GeoPoint location = locationsnapshot.data?.docs[i]['location'];
               final latLng = LatLng(location.latitude, location.longitude); 
               distance = calculateDistance(lat, lng, location.latitude, location.longitude);
@@ -97,8 +96,9 @@ class _MapPageState extends State<MapPage> {
               markers.add(Marker(markerId: MarkerId("location $i"),  
               position: latLng,
               infoWindow: InfoWindow(
-                 title:"Pharmacy Store ${i+1}"
-               ,snippet:'Doctor Name: ${i+1}' )));
+                
+                 title:"Pharmacy Store: ${storeName}"
+               ,snippet:'Doctor Name: ${doctorName}' )));
               _googleMapController?.animateCamera(CameraUpdate.newCameraPosition(
               CameraPosition(
                 target: latLng,
@@ -173,71 +173,115 @@ class _MapPageState extends State<MapPage> {
   //     });
   //   });
   // }
-
-
-
-  // Widget _buildList2(){
-  //   return StreamBuilder<QuerySnapshot>
-  //   (stream: FirebaseFirestore.instance.collection("user").doc("user_id").collection("product").snapshots(),
-  //   builder:)
-  // }
-
   Widget _buildList(){
     return Container(
-      height: 250,
+        height: 200,
       width: 500,
-      child: StreamBuilder(
-          stream:FirebaseFirestore.instance.collection("destination").snapshots(),
-          builder:(context,AsyncSnapshot<QuerySnapshot> snapshot){
-            if(!snapshot.hasData){
-              return Center(child:CircularProgressIndicator(),);
-            }
-            return Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Card(
-                              child: ListView(
-                  children:snapshot.data!.docs.map((document){
-                    return Container(
-                      margin:EdgeInsets.all(20),
-                      child: ListTile(
-                        shape: RoundedRectangleBorder(borderRadius: 
-                        BorderRadius.circular(10),
-                        side: BorderSide(color: Colors.black)),
-                        leading:CircleAvatar(
-                          radius:30,
-                          child:FittedBox(child: Icon(Icons.place)
-                          ,)
-                        ),
-                       title: Text(document["name"] + document["fsurname"]),
-                      subtitle:Text(" Distance:" + document["distance"].toString()+" km"),
-                        contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
-                        // onTap: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>HomePage()));},
-                      ),
-                    );
-                  }).toList(),         
-                ),
-              ),
-            );
-          },
-       ),
+      child: StreamBuilder<QuerySnapshot>(
+        stream: _destinationCollection.snapshots().asBroadcastStream(),
+        builder:(BuildContext context,AsyncSnapshot<QuerySnapshot> snapshot){
+          if(!snapshot.hasData){
+            return Center(child: CircularProgressIndicator(),);
+          }
+          else{
+            if(snapshot.data!.docs.where((QueryDocumentSnapshot<Object?> element) => element['name']
+                .toString().toLowerCase().contains(query.toLowerCase())).isEmpty){
+                  return Center(child:Text("No data found"));
+                }
+              else{
+                 return Card(
+                                    child: ListView(
+              children:[
+                ...snapshot.data!.docs.where((QueryDocumentSnapshot<Object?> element) => element['name']
+                .toString().toLowerCase().contains(query.toLowerCase())
+                ).map((QueryDocumentSnapshot<Object?> data){
+                      final String lname =data["name"];
+                       final String lsurname =data["fsurname"];
+                       final String ldistance =data["distance"].toString();
+
+                       return Container(
+                          margin:EdgeInsets.all(20),
+                         child: ListTile(
+                            shape: RoundedRectangleBorder(borderRadius: 
+                            BorderRadius.circular(10),
+                            side: BorderSide(color: Colors.black)),
+                            leading:CircleAvatar(
+                              radius:30,
+                              child:FittedBox(child: Icon(Icons.place)
+                              ,)
+                            ),
+                           title: Text(lname + lsurname),
+                          subtitle:Text(" Distance:" + ldistance+" km"),
+                            contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
+                            // onTap: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>HomePage()));},
+                            onTap: (){},
+                         ),
+                       );
+                })
+              ]
+
+              
+            ),
+                 );
+              }
+
+           
+           
+          }
+        } ),
     );
   }
 
-  // Widget _builList(){
+
+  // Widget _buildList(){
   //   return Container(
-  //     height: 100,
+  //     height: 250,
   //     width: 500,
-  //     child: ListView.builder(
-  //       itemCount:namesss.length,
-  //       itemBuilder: (context,index){
-  //         return ListTile(
-  //           title: Text(namesss[index].toString()),
-  //         );
-  //       }
-  //       ),
+  //     child: StreamBuilder(
+  //         stream:FirebaseFirestore.instance.collection("destination").snapshots(),
+  //         builder:(context,AsyncSnapshot<QuerySnapshot> snapshot){
+  //           if(!snapshot.hasData){
+  //             return Center(child:CircularProgressIndicator(),);
+  //           }
+  //           return Padding(
+  //             padding: const EdgeInsets.all(10.0),
+  //             child: Card(
+  //                             child: ListView(
+  //                 children:snapshot.data!.docs.map((document){
+  //                    final String lname =document["name"];
+  //                    final String lsurname =document["fsurname"];
+  //                    final String ldistance =document["distance"].toString();
+  //                   return Container(
+  //                     margin:EdgeInsets.all(20),
+  //                     child: ListTile(
+  //                       shape: RoundedRectangleBorder(borderRadius: 
+  //                       BorderRadius.circular(10),
+  //                       side: BorderSide(color: Colors.black)),
+  //                       leading:CircleAvatar(
+                          
+  //                         radius:30,
+  //                         child:FittedBox(child: Icon(Icons.place)
+  //                         ,)
+  //                       ),
+  //                      title: Text(lname + lsurname),
+  //                     subtitle:Text(" Distance:" + ldistance+" km"),
+  //                       contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
+  //                       // onTap: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>HomePage()));},
+  //                       onTap: (){
+                      
+  //                       },
+  //                     ),
+  //                   );
+  //                 }).toList(),         
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //      ),
   //   );
   // }
 
+ 
   // Widget showDestination() {
   //   return Container(
   //     child:Column(
@@ -259,18 +303,57 @@ class _MapPageState extends State<MapPage> {
   //   }
                  
   Widget saveButton() {
+    //  final _textcontroller =TextEditingController(text: "");
     return Container
-    (width: MediaQuery.of(context).size.width,
-      child: RaisedButton.icon(
-          color: Colors.black,
-          onPressed: (){
-            
+    (
+      width: 350,
+      decoration: BoxDecoration(
+      border: Border.all(color:Colors.black)
+      ,color: Colors.black54
+      ,borderRadius:BorderRadius.circular(15) ),
+      child:  Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: TextField(
+          controller: _textcontroller,
+          onChanged: (value){
+            if(value !=""){
+              String texts = value;
+              // query=value;
+              setState(() {
+               this.query=texts;
+              //  this._textcontroller.text = query;
+            });
+            }         
+            // _textcontroller.text = query;
           },
-          icon:Icon(Icons.save,color: Colors.white,),
-          label: Text("Save information",style: TextStyle(color: Colors.white),),
+          decoration: InputDecoration(
+            hintText: "Search",
+            prefixIcon: Icon(Icons.search),
+            suffixIcon: IconButton(icon: Icon(Icons.close),
+            onPressed: (){
+              _textcontroller.clear();
+            },)
           ),
+        ),
+      ),
     );
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   void _onMapCreated(GoogleMapController controller){
    mapController =controller;
