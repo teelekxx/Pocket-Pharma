@@ -15,6 +15,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final auth = FirebaseAuth.instance;
   final uid = FirebaseAuth.instance.currentUser?.uid;
+  final name = FirebaseAuth.instance.currentUser?.displayName;
   // final uid = FirebaseAuth.instance.currentUser?.uid;
 
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
@@ -114,6 +115,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(name);
     return Padding(
         padding: const EdgeInsets.all(0.0),
         child: Center(
