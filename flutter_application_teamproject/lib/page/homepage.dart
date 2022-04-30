@@ -232,6 +232,11 @@ class _MainPageState extends State<MainPage> {
                                 },
                                 child: Column(
                                   children: [
+                                    Icon(
+                                      Icons.add_moderator,
+                                      color: Colors.green,
+                                      size: 25,
+                                    ),
                                     ListTile(
                                       title: Text(document["clinicName"]),
                                       subtitle: Text(document["type"]),
