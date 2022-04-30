@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_application_teamproject/model/profile.dart';
 import 'package:flutter_application_teamproject/page/startpage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -300,6 +301,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   msg:
                                                       "Create account Successfully",
                                                   gravity: ToastGravity.TOP);
+                                              FirebaseFirestore.instance
+                                                  .collection('Profile')
+                                                  .add({
+                                                'allergy': '',
+                                                'age': '',
+                                                'blood': '',
+                                                'description': '',
+                                                'height': '',
+                                                'medicalcondition': '',
+                                                'weight': '',
+                                                'user_id': user?.uid,
+                                              });
                                               formkey.currentState?.reset();
                                               Navigator.push(context,
                                                   MaterialPageRoute(

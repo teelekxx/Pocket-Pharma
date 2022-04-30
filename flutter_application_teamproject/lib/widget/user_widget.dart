@@ -6,6 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 
 class UserWidget extends StatelessWidget {
   final auth = FirebaseAuth.instance;
+  final uid = FirebaseAuth.instance.currentUser?.uid;
+  final name = FirebaseAuth.instance.currentUser?.displayName;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -24,7 +26,7 @@ class UserWidget extends StatelessWidget {
             return Column(
               children: [
                 Text(
-                  document["name"],
+                  name!,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                 ),
                 const SizedBox(height: 4),
