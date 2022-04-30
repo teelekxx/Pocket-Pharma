@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 // import 'package:flutter_application_teamproject/model/information.dart';
 // import 'package:http/http.dart';
 
@@ -109,15 +110,23 @@ navigateTodetail(DocumentSnapshot post){
                     return Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: ListTile(
+                    focusColor: Colors.black,
                      shape: RoundedRectangleBorder(borderRadius: 
                           BorderRadius.circular(10),
                           side: BorderSide(color: Colors.black)),
                           leading:CircleAvatar(
+                            backgroundColor:Colors.black,
                             radius:30,
-                            child:FittedBox(child: Icon(Icons.calendar_month)
+                            child:FittedBox(child: Icon(Icons.calendar_month,color: Colors.white,)
                             ,)
                           ),
-                    title: Text(snapshot.data[index].data()["ownerName"]),
+                    title:Text(snapshot.data[index].data()["doctorName"]),      
+                    // title: RichText(text: TextSpan(children:[
+                    
+                    //   // WidgetSpan(child: Icon(Icons.people)),
+                    //   // TextSpan(text:"hi"+snapshot.data[index].data()["ownerName"])
+                    // ]),
+                    // ),
                     subtitle: Text(d.toString()),
                     contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
                     trailing:  Wrap(spacing: 12,
@@ -155,10 +164,6 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   
-//   var titles ="eiei";
-  // List<Information> information =[];
-  
-
 void initState(){
   super.initState();  
   // loadinfo();
@@ -230,17 +235,100 @@ void initState(){
 //           ),
 //         );
 //       }
-//       );   
+//       );  
+    Timestamp t = widget.post["created"];
+    DateTime d =t.toDate();
+    String formatDate(DateTime dates) => new DateFormat.yMMMMd().format(dates);
+    String formatTimes(DateTime dates) => new DateFormat.jm().format(dates);
   
     return Scaffold(
-      appBar: AppBar(title:Text("test")),
-         body:Card(
-              child:ListTile(
-                title: Text(widget.post["text"]),
-                  subtitle: Text(widget.post["ownerName"]),
-              ) 
-              
-                 ),
+      appBar: AppBar(title:Text("Description"),
+      backgroundColor: Colors.black),
+         body:Center(
+           child: Card(
+                child:Container(
+                  width: 360,
+                  height: 500,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.black87),
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(   
+                        children: [
+                           SizedBox(
+                            height: 20,
+                          ),
+                          SizedBox(
+                             height: 120,
+                             width: 120,
+                             child: const ColoredBox(color: Colors.grey),
+                          ),
+                           SizedBox(
+                            height: 20,
+                          ),
+                           Wrap(children: [
+                                Icon(Icons.person,color: Colors.white,),
+                                Text(" Doctor Name: ",style: TextStyle(color:Colors.white,fontSize: 20),),
+                                 Text(widget.post["doctorName"],style: TextStyle(color:Colors.white,fontSize: 20),),
+                                  ]),
+                           SizedBox(
+                            height: 20,
+                          ),
+                           Wrap(children: [
+                                Icon(Icons.store,color: Colors.white,),
+                                Text(" Clinic Name: ",style: TextStyle(color:Colors.white,fontSize: 20),),
+                                Text(widget.post["clinicName"],style: TextStyle(color:Colors.white,fontSize: 20),),
+                                  ]),        
+                           SizedBox(
+                            height: 20,
+                          ),
+                            Wrap(children: [
+                                Icon(Icons.phone,color: Colors.white,),
+                                Text(" Phone: ",style: TextStyle(color:Colors.white,fontSize: 20),),
+                                Text(widget.post["phone"],style: TextStyle(color:Colors.white,fontSize: 20),),
+                                  ]),        
+                           SizedBox(
+                            height: 20,
+                          ),
+                           Wrap(children: [
+                                Icon(Icons.calendar_month,color: Colors.white,),
+                                Text("  Date:  ",style: TextStyle(color:Colors.white,fontSize: 20),),
+                                Text(formatDate(d),style: TextStyle(color:Colors.white,fontSize: 20),),
+                                  ]),        
+                           SizedBox(
+                            height: 20,
+                          ),
+                          Wrap(children: [
+                                Icon(Icons.timelapse,color: Colors.white,),
+                                Text("  Time: ",style: TextStyle(color:Colors.white,fontSize: 20),),
+                                Text(formatTimes(d),style: TextStyle(color:Colors.white,fontSize: 20),),
+                                  ]),        
+                           SizedBox(
+                            height: 20,
+                          ),
+                          
+                           Wrap(children: [
+                                    Icon(Icons.health_and_safety,color: Colors.white,),
+                                    Text(" Symtom:                      ",style: TextStyle(fontSize: 20,color: Colors.white)),
+                                    // Text(widget.post["symtom"],style: TextStyle(color:Colors.white,fontSize: 20),),
+                                  ]), 
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: SingleChildScrollView(
+                              child:Text(widget.post["symtom"],style: TextStyle(color:Colors.white,fontSize: 20),), ),
+                          )      
+                        ],
+                      ),
+                    )
+                    ),
+
+                ) 
+                
+                   ),
+         ),
         
     );
   }
