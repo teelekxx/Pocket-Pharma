@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+// import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter_application_teamproject/page/startpage.dart';
-import 'package:flutter_application_teamproject/page/profilepage.dart';
-import 'package:flutter_application_teamproject/themes.dart';
+// import 'package:flutter_application_teamproject/page/profilepage.dart';
+// import 'package:flutter_application_teamproject/themes.dart';
 import 'package:flutter_application_teamproject/utils/user_preferences.dart';
 
 Future main() async {

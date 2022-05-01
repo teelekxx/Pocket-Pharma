@@ -1,13 +1,13 @@
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+// import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_application_teamproject/data/user.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter_application_teamproject/data/user.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application_teamproject/page/edit_profile_page.dart';
 import 'package:flutter_application_teamproject/utils/user_preferences.dart';
 import 'package:flutter_application_teamproject/widget/appbar_widget.dart';
-import 'package:flutter_application_teamproject/widget/button_widget.dart';
+// import 'package:flutter_application_teamproject/widget/button_widget.dart';
 import 'package:flutter_application_teamproject/widget/description_widget.dart';
 import 'package:flutter_application_teamproject/widget/user_widget.dart';
 import 'package:flutter_application_teamproject/widget/stat_widget.dart';
