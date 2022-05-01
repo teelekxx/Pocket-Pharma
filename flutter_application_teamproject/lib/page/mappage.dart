@@ -184,7 +184,7 @@ class _MapPageState extends State<MapPage> {
             return Center(child: CircularProgressIndicator(),);
           }
           else{
-            if(snapshot.data!.docs.where((QueryDocumentSnapshot<Object?> element) => element['name']
+            if(snapshot.data!.docs.where((QueryDocumentSnapshot<Object?> element) => element['clinicName']
                 .toString().toLowerCase().contains(query.toLowerCase())).isEmpty){
                   return Center(child:Text("No data found"));
                 }
@@ -192,11 +192,11 @@ class _MapPageState extends State<MapPage> {
                  return Card(
                                     child: ListView(
               children:[
-                ...snapshot.data!.docs.where((QueryDocumentSnapshot<Object?> element) => element['name']
+                ...snapshot.data!.docs.where((QueryDocumentSnapshot<Object?> element) => element['clinicName']
                 .toString().toLowerCase().contains(query.toLowerCase())
                 ).map((QueryDocumentSnapshot<Object?> data){
-                      final String lname =data["name"];
-                       final String lsurname =data["fsurname"];
+                      final String lname =data["clinicName"];
+                       final String lsurname =data["doctorName"];
                        final String ldistance =data["distance"].toString();
 
                        return Container(
