@@ -302,8 +302,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                                       "Create account Successfully",
                                                   gravity: ToastGravity.TOP);
                                               FirebaseFirestore.instance
-                                                  .collection('Profile')
-                                                  .add({
+                                                  .collection('Profile').doc(FirebaseAuth.instance.currentUser!.uid)
+                                                  .set({
                                                 'allergy': '',
                                                 'age': '',
                                                 'blood': '',

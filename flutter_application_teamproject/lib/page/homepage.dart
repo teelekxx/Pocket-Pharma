@@ -22,6 +22,8 @@ class _MainPageState extends State<MainPage> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
   String selectedDoctor = "";
+  String selectedClinic = "";
+  String selectedPhone = "";
   var textController = TextEditingController();
 
   DateTime join(DateTime date, TimeOfDay time) {
@@ -42,8 +44,10 @@ class _MainPageState extends State<MainPage> {
         FirebaseFirestore.instance.collection('appointment').add({
           'created': selectedDate,
           'owner': uid,
-          'text': textController.text,
-          'ownerName': selectedDoctor,
+          'symtom': textController.text,
+          'doctorName': selectedDoctor,
+          'clinicName': selectedClinic,
+          'phone': selectedPhone,
         });
         Fluttertoast.showToast(
             msg: "Appointed!",
@@ -61,7 +65,7 @@ class _MainPageState extends State<MainPage> {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) {
       setState(() {
@@ -76,7 +80,7 @@ class _MainPageState extends State<MainPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              insetPadding: const EdgeInsets.fromLTRB(50.0, 200.0, 50.0, 50.0),
+              insetPadding: const EdgeInsets.all(10.0),
               content: Container(
                   width: double.maxFinite,
                   child: ListView(children: [
@@ -92,11 +96,11 @@ class _MainPageState extends State<MainPage> {
                         hintText: 'Type here....',
                         border: OutlineInputBorder(),
                       ),
-                      maxLines: 8,
+                      maxLines: 20,
                       minLines: 1,
                     ),
                     SizedBox(
-                      height: 350,
+                      height: 50,
                     ),
                     SizedBox(
                         width: 100,
@@ -156,6 +160,7 @@ class _MainPageState extends State<MainPage> {
                               child: Material(
                                   child: InkWell(
                                 onTap: () {
+                                  textController.text = "";
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -165,23 +170,29 @@ class _MainPageState extends State<MainPage> {
                                               const EdgeInsets.symmetric(
                                                   vertical: 200,
                                                   horizontal: 50),
-                                          content: Stack(
+                                          content: Column(
                                             children: <Widget>[
                                               Align(
                                                 alignment: Alignment.topLeft,
                                                 child: ListTile(
-                                                  title: Text(document["name"],
+                                                  title: Text(
+                                                      document["clinicName"],
                                                       style: TextStyle(
                                                           fontSize: 25,
                                                           fontWeight:
                                                               FontWeight.bold)),
-                                                  subtitle:
-                                                      Text(document["type"]),
+                                                  subtitle: Text(
+                                                      document["doctorName"] +
+                                                          ",  " +
+                                                          document["type"]),
                                                 ),
                                               ),
                                               Align(
                                                   alignment: Alignment.center,
                                                   child: Text(document["des"])),
+                                              SizedBox(
+                                                height: 40,
+                                              ),
                                               Align(
                                                 alignment:
                                                     Alignment.bottomCenter,
@@ -203,7 +214,13 @@ class _MainPageState extends State<MainPage> {
                                                                         .black87))),
                                                         onPressed: () {
                                                           selectedDoctor =
-                                                              document["name"];
+                                                              document[
+                                                                  "doctorName"];
+                                                          selectedClinic =
+                                                              document[
+                                                                  "clinicName"];
+                                                          selectedPhone =
+                                                              document["phone"];
                                                           _appointment(context);
                                                           // _selectDate(context);
                                                         })),
@@ -215,8 +232,13 @@ class _MainPageState extends State<MainPage> {
                                 },
                                 child: Column(
                                   children: [
+                                    Icon(
+                                      Icons.add_moderator,
+                                      color: Colors.green,
+                                      size: 25,
+                                    ),
                                     ListTile(
-                                      title: Text(document["name"]),
+                                      title: Text(document["clinicName"]),
                                       subtitle: Text(document["type"]),
                                       // onTap: (){Navigator.push(cntext,MaterialPageRoute(builder: (context)=>HomePage()));},
                                     ),

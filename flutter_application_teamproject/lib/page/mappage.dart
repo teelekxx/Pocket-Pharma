@@ -17,8 +17,8 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   static GoogleMapController? _googleMapController;
   late GoogleMapController mapController;
-  String query ="";
-  String distanceString="";
+  String query = "";
+  String distanceString = "";
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   CollectionReference _destinationCollection =
       FirebaseFirestore.instance.collection("destination");
@@ -26,16 +26,16 @@ class _MapPageState extends State<MapPage> {
   //   Place(fname: "Peem_opas",fsurname: "Opas",email: "Peem_opas@hptmail.com",password: "1234"),
   //   Place(fname: "Cream",fsurname: "Worada",email: "Cream@hptmail.com",password: "5555"),
   // ];
-  Completer<GoogleMapController> _controller =Completer();
-  final _textcontroller =TextEditingController(text: "");
+  Completer<GoogleMapController> _controller = Completer();
+  final _textcontroller = TextEditingController(text: "");
   Set<Marker> markers = Set();
-  double lat=0,lng=0 ,distance =0;
+  double lat = 0, lng = 0, distance = 0;
   var data;
   void initState() {
     super.initState();
     // showDestination();
-    findLatLng();  
-   
+    findLatLng();
+
     // getplacesource();
   }
 
@@ -57,15 +57,15 @@ class _MapPageState extends State<MapPage> {
         c((lat2 - lat1) * p) / 2 +
         c(lat1 * p) * c(lat2 * p) * (1 - c((lng2 - lng1) * p)) / 2;
     distance = 12742 * asin(sqrt(a));
-     
-    var myformat =NumberFormat('#0.0#','en_us');
-    distanceString =myformat.format(distance);
+
+    var myformat = NumberFormat('#0.0#', 'en_us');
+    distanceString = myformat.format(distance);
     return distance;
   }
 
-  Future<LocationData?> findLocationData() async{
-    Location location =Location();
-    try{
+  Future<LocationData?> findLocationData() async {
+    Location location = Location();
+    try {
       return location.getLocation();
     } catch (e) {
       return null;
@@ -86,30 +86,27 @@ class _MapPageState extends State<MapPage> {
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot> locationsnapshot) {
           if (locationsnapshot.hasData) {
-              for(int i =0 ;i<locationsnapshot.data!.docs.length;i++){
-              String doctorName =locationsnapshot.data?.docs[i]['doctorName'];
-              String storeName =locationsnapshot.data?.docs[i]['storeName'];
+            for (int i = 0; i < locationsnapshot.data!.docs.length; i++) {
+              String doctorName = locationsnapshot.data?.docs[i]['doctorName'];
+              String storeName = locationsnapshot.data?.docs[i]['storeName'];
               GeoPoint location = locationsnapshot.data?.docs[i]['location'];
-              final latLng = LatLng(location.latitude, location.longitude); 
-              distance = calculateDistance(lat, lng, location.latitude, location.longitude);
-              print("Distance $i : $distance");        
-              _destinationCollection.doc('Test${i+1}').update({"distance":distanceString}); 
-              markers.add(Marker(markerId: MarkerId("location $i"),  
-              position: latLng,
-              infoWindow: InfoWindow(
-                
-                 title:"Pharmacy Store: ${storeName}"
-               ,snippet:'Doctor Name: ${doctorName}' )));
-              _googleMapController?.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(
-                target: latLng,
-                zoom: 10.0
-              ),  
-   
-
-            )
-          );
-
+              final latLng = LatLng(location.latitude, location.longitude);
+              distance = calculateDistance(
+                  lat, lng, location.latitude, location.longitude);
+              print("Distance $i : $distance");
+              _destinationCollection
+                  .doc('Test${i + 1}')
+                  .update({"distance": distanceString});
+              markers.add(Marker(
+                  markerId: MarkerId("location $i"),
+                  position: latLng,
+                  infoWindow: InfoWindow(
+                      title: "Pharmacy Store: ${storeName}",
+                      snippet: 'Doctor Name: ${doctorName}')));
+              _googleMapController
+                  ?.animateCamera(CameraUpdate.newCameraPosition(
+                CameraPosition(target: latLng, zoom: 10.0),
+              ));
             }
             return FutureBuilder(
                 future: firebase,
@@ -173,9 +170,9 @@ class _MapPageState extends State<MapPage> {
   //     });
   //   });
   // }
-  Widget _buildList(){
+  Widget _buildList() {
     return Container(
-        height: 200,
+      height: 200,
       width: 500,
       child: StreamBuilder<QuerySnapshot>(
         stream: _destinationCollection.snapshots().asBroadcastStream(),
@@ -210,7 +207,7 @@ class _MapPageState extends State<MapPage> {
                               child:FittedBox(child: Icon(Icons.place)
                               ,)
                             ),
-                           title: Text(lname + lsurname),
+                           title: Text(lname + " Doctor: "+lsurname),
                           subtitle:Text(" Distance:" + ldistance+" km"),
                             contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
                             // onTap: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>HomePage()));},
@@ -224,14 +221,10 @@ class _MapPageState extends State<MapPage> {
             ),
                  );
               }
-
-           
-           
-          }
-        } ),
+            }
+          }),
     );
   }
-
 
   // Widget _buildList(){
   //   return Container(
@@ -254,11 +247,11 @@ class _MapPageState extends State<MapPage> {
   //                   return Container(
   //                     margin:EdgeInsets.all(20),
   //                     child: ListTile(
-  //                       shape: RoundedRectangleBorder(borderRadius: 
+  //                       shape: RoundedRectangleBorder(borderRadius:
   //                       BorderRadius.circular(10),
   //                       side: BorderSide(color: Colors.black)),
   //                       leading:CircleAvatar(
-                          
+
   //                         radius:30,
   //                         child:FittedBox(child: Icon(Icons.place)
   //                         ,)
@@ -268,11 +261,11 @@ class _MapPageState extends State<MapPage> {
   //                       contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
   //                       // onTap: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>HomePage()));},
   //                       onTap: (){
-                      
+
   //                       },
   //                     ),
   //                   );
-  //                 }).toList(),         
+  //                 }).toList(),
   //               ),
   //             ),
   //           );
@@ -281,7 +274,6 @@ class _MapPageState extends State<MapPage> {
   //   );
   // }
 
- 
   // Widget showDestination() {
   //   return Container(
   //     child:Column(
@@ -304,59 +296,43 @@ class _MapPageState extends State<MapPage> {
 
   Widget saveButton() {
     //  final _textcontroller =TextEditingController(text: "");
-    return Container
-    (
+    return Container(
       width: 350,
       decoration: BoxDecoration(
-      border: Border.all(color:Colors.black)
-      ,color: Colors.black54
-      ,borderRadius:BorderRadius.circular(15) ),
-      child:  Padding(
+          border: Border.all(color: Colors.blue),
+          // color: Colors.black54,
+          borderRadius: BorderRadius.circular(15)),
+      child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: TextField(
           controller: _textcontroller,
-          onChanged: (value){
-            if(value !=""){
+          onChanged: (value) {
+            if (value != "") {
               String texts = value;
               // query=value;
               setState(() {
-               this.query=texts;
-              //  this._textcontroller.text = query;
-            });
-            }         
+                this.query = texts;
+                //  this._textcontroller.text = query;
+              });
+            }
             // _textcontroller.text = query;
           },
           decoration: InputDecoration(
-            hintText: "Search",
-            prefixIcon: Icon(Icons.search),
-            suffixIcon: IconButton(icon: Icon(Icons.close),
-            onPressed: (){
-              _textcontroller.clear();
-            },)
-          ),
+              hintText: "Search",
+              prefixIcon: Icon(Icons.search),
+              suffixIcon: IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  _textcontroller.clear();
+                },
+              )),
         ),
       ),
     );
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  void _onMapCreated(GoogleMapController controller){
-   mapController =controller;
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
   }
 
   Widget showMap() {

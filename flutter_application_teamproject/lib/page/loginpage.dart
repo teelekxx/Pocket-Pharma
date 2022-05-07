@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final formkey = GlobalKey<FormState>();
   Profile profile = Profile(email: '', password: '');
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
+  
   @override
   OutlineInputBorder myfocusborder() {
     return OutlineInputBorder(
@@ -178,6 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) {
+                                                    
                                                     return WelcomePage();
                                                   }));
                                                 });

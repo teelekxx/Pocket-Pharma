@@ -5,7 +5,7 @@ import 'package:flutter_application_teamproject/page/startpage.dart';
 // import 'package:flutter_application_teamproject/page/profilepage.dart';
 // import 'package:flutter_application_teamproject/themes.dart';
 import 'package:flutter_application_teamproject/utils/user_preferences.dart';
-
+import 'package:dcdg/dcdg.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
