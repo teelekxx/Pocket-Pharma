@@ -27,10 +27,36 @@ navigateTodetail(DocumentSnapshot post){
   Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailPage(post:post,)));
 }
 
-// void initState(){
-//   super.initState();  
-//   // var _data =getPosts();
-// }
+RoundedRectangleBorder myRoundedborder() {
+    return RoundedRectangleBorder(
+         borderRadius:BorderRadius.circular(10),
+        side: BorderSide(color: Colors.black));
+  }
+
+RoundedRectangleBorder myRoundedborderpending() {
+    return RoundedRectangleBorder(
+         borderRadius:BorderRadius.circular(10),
+        side: BorderSide(color: Colors.red));
+  }
+
+CircleAvatar myCircleAvatar(){
+  return CircleAvatar(
+          backgroundColor:Colors.black,
+          radius:30,
+          child:FittedBox(child: Icon(Icons.calendar_month,color: Colors.white,)
+            ,)
+    );
+}
+
+CircleAvatar myCircleAvatarpending(){
+  return CircleAvatar(
+          backgroundColor:Colors.red,
+          radius:30,
+          child:FittedBox(child: Icon(Icons.calendar_month,color: Colors.black,)
+            ,)
+    );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -106,20 +132,19 @@ navigateTodetail(DocumentSnapshot post){
               String userID =FirebaseAuth.instance.currentUser!.uid;
               Timestamp t = snapshot.data[index].data()['created'];
               DateTime d =t.toDate();
-              if(snapshot.data[index].data()["owner"]==userID){ 
-                    return Padding(
+              String request = snapshot.data[index].data()['status'];
+              if(snapshot.data[index].data()["owner"]==userID){           
+                  return Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: ListTile(
                     focusColor: Colors.black,
-                     shape: RoundedRectangleBorder(borderRadius: 
-                          BorderRadius.circular(10),
-                          side: BorderSide(color: Colors.black)),
-                          leading:CircleAvatar(
-                            backgroundColor:Colors.black,
-                            radius:30,
-                            child:FittedBox(child: Icon(Icons.calendar_month,color: Colors.white,)
-                            ,)
-                          ),
+                     shape:request=="pending"?
+                       myRoundedborderpending()
+                      :myRoundedborder()
+                     ,
+                      leading:request=="pending"?
+                       myCircleAvatarpending()
+                      :myCircleAvatar(),
                     title:Text(snapshot.data[index].data()["doctorName"]),      
                     // title: RichText(text: TextSpan(children:[
                     
@@ -131,7 +156,7 @@ navigateTodetail(DocumentSnapshot post){
                     contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
                     trailing:  Wrap(spacing: 12,
                     children: <Widget>[              
-                            Icon(Icons.arrow_circle_right)
+                            Icon(Icons.pending)
                           ],),
                     onTap: ()=> navigateTodetail(snapshot.data[index]),
                   ),
@@ -169,26 +194,6 @@ void initState(){
   // loadinfo();
 }
 
-// void loadinfo() {
-//   FirebaseFirestore.instance.collection("appointment").doc(FirebaseAuth.instance.currentUser!.uid).get().then((snapshot){ 
-//     for(var info in snapshot.data()!["owner"]){ 
-//         FirebaseFirestore.instance.collection("Medical").doc(info).get().then((infosnapshot){
-//           setState(() {
-//             information.add(
-//               Information(
-//                 name:infosnapshot["Name"],
-//                 rate: infosnapshot["Rating"],
-//                 type: infosnapshot["Type"])
-//             );
-//             // titles = infosnapshot["Type"];
-//             // print(titles+"testttttttttt");
-//           });
-//         });
-//     }
-//   });
-//   print(FirebaseAuth.instance.currentUser!.uid);
-//   print(information);
-// }
 //   @override
   Widget build(BuildContext context) {
     
