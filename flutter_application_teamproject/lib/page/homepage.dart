@@ -121,7 +121,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(name);
     return Padding(
         padding: const EdgeInsets.all(0.0),
         child: Center(
