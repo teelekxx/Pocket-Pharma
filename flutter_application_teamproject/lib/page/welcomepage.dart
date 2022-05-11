@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_teamproject/data/menu_items.dart';
 import 'package:flutter_application_teamproject/model/meun_item.dart';
 import 'package:flutter_application_teamproject/page/chatpage.dart';
+import 'package:flutter_application_teamproject/page/clinic_appoinmentpage.dart';
 // import 'package:flutter_application_teamproject/page/home.dart';
 import 'package:flutter_application_teamproject/page/homepage.dart';
 import 'package:flutter_application_teamproject/page/mappage.dart';
