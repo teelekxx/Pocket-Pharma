@@ -72,140 +72,215 @@ CircleAvatar myCircleAvataraccept(){
     );
 }
 
+Widget listviewpending(){
+  return FutureBuilder(
+              future: getPosts(),
+              builder:(_, AsyncSnapshot snapshot){
+              if(snapshot.connectionState == ConnectionState.waiting){
+                return Center(
+                  child:Text("Loading......")
+                );
+              }
+              // if(snapshot.hasData){        
+              //   return Center(child: Text("Don't have  data"));
+              // }
+              // Map<String,dynamic> docu =snapshot.data();  
+              // try{       
+                  return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder:(_,index){
+                  String userID =FirebaseAuth.instance.currentUser!.uid;
+                  Timestamp t = snapshot.data[index].data()['created'];
+                  DateTime d =t.toDate();
+                  String request = snapshot.data[index].data()['status'];
+                  if(snapshot.data[index].data()["owner"]==userID && snapshot.data[index].data()["status"]=="pending"){ 
+                    print(request);    
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Ink(
+                        // height: 100,
+                          color:(request=="pending")?
+                          Colors.yellow[100]:
+                          (request=="Accept")?
+                          Colors.green[100]
+                          :Colors.black26,
+                            child: ListTile(
+                            dense: true,
+                            focusColor: Colors.black,
+                             shape:(request=="pending")?
+                              myRoundedborderpending():
+                              (request=="Accept")?
+                              myRoundedborderaccept()
+                              :myRoundedborder()
+                             ,
+                              leading:(request=="pending")?
+                               myCircleAvatarpending():
+                              (request=="Accept")?
+                              myCircleAvataraccept()
+                              :myCircleAvatar(),
+                            title:Text(snapshot.data[index].data()["doctorName"]+" wow"),      
+                            // title: RichText(text: TextSpan(children:[
+                            
+                            //   // WidgetSpan(child: Icon(Icons.people)),
+                            //   // TextSpan(text:"hi"+snapshot.data[index].data()["ownerName"])
+                            // ]),
+                            // ),
+                            subtitle: Text(d.toString()),
+                            contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
+                            trailing:  Wrap(spacing: 12,
+                            children: <Widget>[ 
+                                    if(request=="pending")      
+                                      Icon(Icons.alarm_add,size: 40,color: Colors.yellow.shade700,), 
+                                      // Text("Pending...",style: TextStyle(fontSize: 20),),         
+                                    if(request=="Accept")
+                                      Icon(Icons.people_alt,size: 40,color: Colors.green.shade700),
+                                    if(request=="")
+                                      Icon(Icons.unsubscribe,size: 40,color: Colors.black87)
+                                  ],),
+                            onTap: ()=> navigateTodetail(snapshot.data[index]),
+                          ),
+                        ),
+                    )
+                      ;     
+                    // return Center(child: Text("Don't have any information"),);
+                  }
+                  else{
+                    return Center(child: Text(""),);
+                  }
+                }
+                ); 
+                return Text("loading...");      
+            });
+}
 
+
+Widget listviewappointment(){
+  return FutureBuilder(
+              future: getPosts(),
+              builder:(_, AsyncSnapshot snapshot){
+              if(snapshot.connectionState == ConnectionState.waiting){
+                return Center(
+                  child:Text("Loading......")
+                );
+              }
+              // if(!snapshot.hasData){   
+              //   print("hi no data");    
+              //   return Center(child: Text("Don't have  data"));
+              // }
+              // Map<String,dynamic> docu =snapshot.data();  
+              // try{  
+              else{   
+                  return ListView.builder(         
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder:(_,index){
+                  String userID =FirebaseAuth.instance.currentUser!.uid;
+                  Timestamp t = snapshot.data[index].data()['created'];
+                  DateTime d =t.toDate();
+                  String request = snapshot.data[index].data()['status'];
+                  if(snapshot.data[index].data()["owner"]==userID && snapshot.data[index].data()["status"]=="Accept"){ 
+                    print(request);    
+                      return 
+                     Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Ink(
+                          color:(request=="pending")?
+                          Colors.yellow[100]:
+                          (request=="Accept")?
+                          Colors.green[100]
+                          :Colors.black26,
+                            child: ListTile(
+                            focusColor: Colors.black,
+                             shape:(request=="pending")?
+                              myRoundedborderpending():
+                              (request=="Accept")?
+                              myRoundedborderaccept()
+                              :myRoundedborder()
+                             ,
+                              leading:(request=="pending")?
+                               myCircleAvatarpending():
+                              (request=="Accept")?
+                              myCircleAvataraccept()
+                              :myCircleAvatar(),
+                            title:Text(snapshot.data[index].data()["doctorName"]+" wow"),      
+                            // title: RichText(text: TextSpan(children:[
+                            
+                            //   // WidgetSpan(child: Icon(Icons.people)),
+                            //   // TextSpan(text:"hi"+snapshot.data[index].data()["ownerName"])
+                            // ]),
+                            // ),
+                            subtitle: Text(d.toString()),
+                            contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
+                            trailing:  Wrap(spacing: 12,
+                            children: <Widget>[ 
+                                    if(request=="pending")      
+                                      Icon(Icons.alarm_add,size: 40,color: Colors.yellow.shade700,), 
+                                      // Text("Pending...",style: TextStyle(fontSize: 20),),         
+                                    if(request=="Accept")
+                                      Icon(Icons.people_alt,size: 40,color: Colors.green.shade700),
+                                    if(request=="")
+                                      Icon(Icons.unsubscribe,size: 40,color: Colors.black87)
+                                  ],),
+                            onTap: ()=> navigateTodetail(snapshot.data[index]),
+                          ),
+                        ),
+                    )
+                      ;     
+                    // return Center(child: Text("Don't have any information"),);
+                  }
+                  else{
+                    return Center(child: Text(""),);
+                  }
+                }
+                ); 
+              }
+                return Text("loading...");      
+            });
+}
+
+Widget textpending(){
+  return Container(
+  margin: const EdgeInsets.all(15.0),
+  // padding: const EdgeInsets.all(3.0),
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.black)
+  ),
+  child: Text('Pending Appointment',style: TextStyle(fontSize: 30),),
+   );
+}
+
+Widget textshowappointment(){
+  return Container(
+  margin: const EdgeInsets.all(15.0),
+  // padding: const EdgeInsets.all(3.0),
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.black)
+  ),
+  child: Text('Accept Appointment',style: TextStyle(fontSize: 30),),
+   );
+}
   @override
   Widget build(BuildContext context) {
-    // QuerySnapshot snapid = FirebaseFirestore.instance.collection("appointment").where("owner",isEqualTo:currentuser!.uid).get();
-    
-    //  return Container(
-    //   // height: 250,
-    //   width: 500,
-    //   child: StreamBuilder(
-    //       stream:_appointmentCollection.snapshots(),
-    //       builder:(context,AsyncSnapshot<QuerySnapshot> snapshot){
-    //         if(!snapshot.hasData){
-    //           return Center(child:CircularProgressIndicator(),);
-    //         }
-    //         final data = snapshot.requireData;
-    //         return Padding(
-    //           padding: const EdgeInsets.all(10.0),
-    //           child: Card(
-    //                           child: ListView(
-    //               children:snapshot.data!.docs.map((document){
-                  
-    //                 Timestamp t = document['created'];
-    //                 DateTime d =t.toDate();
-    //                 return Container(
-    //                   margin:EdgeInsets.all(20),
-    //                   child: ListTile(
-    //                     shape: RoundedRectangleBorder(borderRadius: 
-    //                     BorderRadius.circular(10),
-    //                     side: BorderSide(color: Colors.black)),
-    //                     leading:CircleAvatar(
-    //                       radius:30,
-    //                       child:FittedBox(child: Icon(Icons.calendar_month)
-    //                       ,)
-    //                     ),
-    //                     title:Text(d.toString()),
-    //                     subtitle:  Text(document["ownerName"]+" "+document["text"]),    
-    //                     contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
-    //                     trailing:  Wrap(spacing: 12,
-    //                     children: <Widget>[              
-    //                       Icon(Icons.arrow_circle_right)
-    //                     ],),
-    //                     onTap:() => 
-    //                     navigateTodetail(snapshot.data),
-    //                   ),
-    //                 );
-    //               }).toList(),         
-    //             ),
-    //           ),
-    //         );
-    //       },
-    //    ),
-    // );
     return Center(
       child: Container(
-        //  height: 250,
-        //  width: 500,
-        child: FutureBuilder(
-          future: getPosts(),
-          builder:(_, AsyncSnapshot snapshot){
-          if(snapshot.connectionState == ConnectionState.waiting){
-            return Center(
-              child:Text("Loading......")
-            );
-          }
-          // if(snapshot.hasData){        
-          //   return Center(child: Text("Don't have  data"));
-          // }
-          // Map<String,dynamic> docu =snapshot.data();  
-          // try{       
-              return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder:(_,index){
-              String userID =FirebaseAuth.instance.currentUser!.uid;
-              Timestamp t = snapshot.data[index].data()['created'];
-              DateTime d =t.toDate();
-              String request = snapshot.data[index].data()['status'];
-              if(snapshot.data[index].data()["owner"]==userID){ 
-                print(request);    
-                  return Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Ink(
-                    color:(request=="pending")?
-                    Colors.yellow[100]:
-                    (request=="Accept")?
-                    Colors.green[100]
-                    :Colors.black26,
-                      child: ListTile(
-                      focusColor: Colors.black,
-                       shape:(request=="pending")?
-                        myRoundedborderpending():
-                        (request=="Accept")?
-                        myRoundedborderaccept()
-                        :myRoundedborder()
-                       ,
-                        leading:(request=="pending")?
-                         myCircleAvatarpending():
-                        (request=="Accept")?
-                        myCircleAvataraccept()
-                        :myCircleAvatar(),
-                      title:Text(snapshot.data[index].data()["doctorName"]+" wow"),      
-                      // title: RichText(text: TextSpan(children:[
-                      
-                      //   // WidgetSpan(child: Icon(Icons.people)),
-                      //   // TextSpan(text:"hi"+snapshot.data[index].data()["ownerName"])
-                      // ]),
-                      // ),
-                      subtitle: Text(d.toString()),
-                      contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
-                      trailing:  Wrap(spacing: 12,
-                      children: <Widget>[ 
-                              if(request=="pending")      
-                                Icon(Icons.alarm_add,size: 40,color: Colors.yellow.shade700,), 
-                                // Text("Pending...",style: TextStyle(fontSize: 20),),         
-                              if(request=="Accept")
-                                Icon(Icons.people_alt,size: 40,color: Colors.green.shade700),
-                              if(request=="")
-                                Icon(Icons.unsubscribe,size: 40,color: Colors.black87)
-                            ],),
-                      onTap: ()=> navigateTodetail(snapshot.data[index]),
-                    ),
-                  ),
-                );     
-                // return Center(child: Text("Don't have any information"),);
-              }
-              else{
-                return Center(child: Text(""),);
-              }
-            }
-            ); 
-          // }catch(e){
-          //   print(e);
-          // }  
-            return Text("loading...");      
-        }),
+
+        child: SingleChildScrollView(
+            // physics: ScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize:  MainAxisSize.min,
+              children: [
+                SizedBox(height: 20,),
+                textpending(),
+                listviewpending(),
+                textshowappointment(),
+                listviewappointment(),
+              ],
+          ),
+            ),
+        ),
       ),
     );
   }
@@ -227,64 +302,13 @@ void initState(){
   // loadinfo();
 }
 
-//   @override
-  Widget build(BuildContext context) {
-    
-//     final Stream<QuerySnapshot> _bmStreams = FirebaseFirestore.instance.collection('appointment').snapshots(includeMetadataChanges: true);  
-//     return StreamBuilder<QuerySnapshot>(
-//       stream: _bmStreams,
-//       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-//          if (!snapshot.hasData) {
-//           return Text('Something went wrong');
-//         }
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return Text("Loadingsss");
-//         }
-//         // print(snapshot.data.data());
-//         return Scaffold(
-//           appBar: AppBar(
-//               title: Text('My Questions'),
-        
-//           ),
-//               body: Container(
-//               child:ListView.builder(
-//                     // shrinkWrap: true,
-//                     itemCount: snapshot.data!.docs.length,
-//                     itemBuilder: (context, int index) {
-//                     final DocumentSnapshot ds = snapshot.data!.docs[index];
-//                     if (!ds.exists) print('not exists');
-//   // here we return the second StreamBuilder
-//                     print(ds);
-//                     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-//                           stream: FirebaseFirestore.instance.collection('Medical').doc(ds.id).snapshots(),
-//                           builder: (BuildContext context,
-//                           AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
-//                           qSnapshot) {  
-//                            Map<String, dynamic>? datas = ds.data() as Map<String, dynamic>?;       
-//                           print(ds.id);
-//                           if (qSnapshot.hasData) return Text(datas!["ownerName"]);
-//                           if (qSnapshot.connectionState == ConnectionState.waiting)  return Text("Loading Content");                        
-//                           print(datas!["text"] ); // should print the question
-//                           return Text(datas["text"]);
-//     },
-//   );
-// },
-//                   )
-//           ),
-//         );
-//       }
-//       );  
-    Timestamp t = widget.post["created"];
-    DateTime d =t.toDate();
-    String formatDate(DateTime dates) => new DateFormat.yMMMMd().format(dates);
-    String formatTimes(DateTime dates) => new DateFormat.jm().format(dates);
-  
-    return Scaffold(
-      appBar: AppBar(title:Text("Description"),
-      backgroundColor: Colors.black),
-         body:Center(
-           child: Card(
-                child:Container(
+Widget listappointmentdateinformation(){
+  Timestamp t = widget.post["created"];
+  DateTime d =t.toDate();
+  String formatDate(DateTime dates) => new DateFormat.yMMMMd().format(dates);
+  String formatTimes(DateTime dates) => new DateFormat.jm().format(dates);
+  return Card(
+    child:Container(
                   width: 360,
                   height: 500,
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.black87),
@@ -365,7 +389,32 @@ void initState(){
 
                 ) 
                 
-                   ),
+                   
+
+  );
+}
+
+Widget displaytest(){
+  return Text("show pending Appointment",style: TextStyle(fontSize: 100),);
+}
+
+//   @override
+  Widget build(BuildContext context) { 
+    return Scaffold(
+      appBar: AppBar(title:Text("Description"),
+      backgroundColor: Colors.black),
+         body:Center(
+           child: SingleChildScrollView(
+                        child: Column(
+               children: [
+                 listappointmentdateinformation(),
+                  SizedBox(
+                              height: 20,
+                            ),
+                  displaytest()
+               ]
+             ),
+           )
          ),
         
     );
