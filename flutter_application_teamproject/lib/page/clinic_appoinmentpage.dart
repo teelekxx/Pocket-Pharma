@@ -29,13 +29,13 @@ RoundedRectangleBorder myRoundedborder() {
 RoundedRectangleBorder myRoundedborderpending() {
     return RoundedRectangleBorder(
          borderRadius:BorderRadius.circular(10),
-        side: BorderSide(color: Colors.yellow.shade600,width: 5));
+        side: BorderSide(color: Colors.black,width: 5));
   }
 
 RoundedRectangleBorder myRoundedborderaccept() {
     return RoundedRectangleBorder(
          borderRadius:BorderRadius.circular(10),
-        side: BorderSide(color: Colors.green,width: 5));
+        side: BorderSide(color: Colors.black,width: 5));
   }
 
 CircleAvatar myCircleAvatar(){
@@ -223,8 +223,11 @@ Widget textpending(){
   margin: const EdgeInsets.all(15.0),
   // padding: const EdgeInsets.all(3.0),
   decoration: BoxDecoration(
-    border: Border.all(color: Colors.black)
+    border: Border.all(color: Colors.black,width: 4),
+    shape: BoxShape.rectangle,
+    borderRadius: BorderRadius.circular(20)
   ),
+  padding:const EdgeInsets.all(15.0) ,
   child: Text('Patient Request',style: TextStyle(fontSize: 30),),
    );
 }
@@ -234,8 +237,11 @@ Widget textshowappointment(){
   margin: const EdgeInsets.all(15.0),
   // padding: const EdgeInsets.all(3.0),
   decoration: BoxDecoration(
-    border: Border.all(color: Colors.black)
+    border: Border.all(color: Colors.black,width: 4),
+    shape: BoxShape.rectangle,
+    borderRadius: BorderRadius.circular(20)
   ),
+  padding:const EdgeInsets.all(15.0) ,
   child: Text('Patient Appointment',style: TextStyle(fontSize: 30),),
    );
 }

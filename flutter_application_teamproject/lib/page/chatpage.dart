@@ -215,22 +215,24 @@ Widget listviewappointment(){
 
 Widget textpending(){
   return Container(
-  // margin: const EdgeInsets.all(15.0),
-  // padding: const EdgeInsets.all(3.0),
-  decoration: BoxDecoration(
-    border: Border.all(color: Colors.black)
+   decoration: BoxDecoration(
+    border: Border.all(color: Colors.black,width: 4),
+    shape: BoxShape.rectangle,
+    borderRadius: BorderRadius.circular(20)
   ),
+  padding:const EdgeInsets.all(15.0) ,
   child: Text('Pending Appointment',style: TextStyle(fontSize: 30),),
    );
 }
 
 Widget textshowappointment(){
   return Container(
-  // margin: const EdgeInsets.all(15.0),
-  // padding: const EdgeInsets.all(3.0),
-  decoration: BoxDecoration(
-    border: Border.all(color: Colors.black)
+   decoration: BoxDecoration(
+    border: Border.all(color: Colors.black,width: 4),
+    shape: BoxShape.rectangle,
+    borderRadius: BorderRadius.circular(20)
   ),
+  padding:const EdgeInsets.all(15.0) ,
   child: Text('Accept Appointment',style: TextStyle(fontSize: 30),),
    );
 }
