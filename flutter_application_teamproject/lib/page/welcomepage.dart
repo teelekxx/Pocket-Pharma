@@ -123,8 +123,9 @@ class _WelcomePageState extends State<WelcomePage> {
                   ));
             } else if (data.hasData && data.data == true) {
               screen = [
-                ClinicMainPage(),
+                ClinicAppointmnetPage(),
                 ClinicProfilePage(),
+              
               ];
               destination = [
                 NavigationDestination(
