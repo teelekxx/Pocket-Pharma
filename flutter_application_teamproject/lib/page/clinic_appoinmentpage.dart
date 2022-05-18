@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -159,11 +160,31 @@ Widget listviewpending(){
             });
 }
 
+//  getage(String petId) async {
+//     DocumentReference documentReference =FirebaseFirestore.instance.collection('Profile').doc(petId);
+//     String specie  ="";
+//     await documentReference.get().then((snapshot) {
+//       specie = (snapshot.data() as Map<String, dynamic>)['age'] as String;
+//     });
+//     print(specie);
+//     return specie;
+//   }
+
+// Future<String> getAge(String userID) async {
+//   String specie  ="";
+//   await Firebase.initializeApp().then((value) => 
+//     FirebaseFirestore.instance.collection('Profile').doc(userID).snapshots().listen(
+//       (event) { 
+//        specie = event.data()!['age'];
+//       //  print(specie);
+//       }
+//       )
+//   );
+//   return specie;
+// }
+
 Future<void> createprescription(BuildContext context,String doctorname,String currentid,String userid,String phonenum) async {
-    var textController = TextEditingController();
-    // var firestores =FirebaseFirestore.instance;
-    // QuerySnapshot qn = await firestores.collection("appointment").where("doctorID",isEqualTo:FirebaseAuth.instance.currentUser!.uid).get();
-    // DocumentReference documentReference =qn.
+    var textController = TextEditingController();  
     final String? des = await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -172,7 +193,8 @@ Future<void> createprescription(BuildContext context,String doctorname,String cu
               content: Container(
                   width: double.maxFinite,
                   child: ListView(children: [
-                    Text("Please fill the Pill information",
+                    Text("age"),
+                    Text("Please fill the Pill informations",
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold)),
                     SizedBox(
@@ -211,7 +233,7 @@ Future<void> createprescription(BuildContext context,String doctorname,String cu
                             });
                             FirebaseFirestore.instance.collection("appointment").doc(currentid).update({"status":"Success"});  
                             Fluttertoast.showToast(
-                            msg: "Appointed!",
+                            msg: "Make a Prescription!",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.CENTER,
                             timeInSecForIosWeb: 1,
@@ -251,7 +273,8 @@ Widget listviewappointment(){
                   DateTime d =t.toDate();
                   String request = appointmnet['status'];
                   String doctorname=appointmnet["doctorName"];
-                  String usercurrentid =snapshot.data.docs[index].reference.id.toString();
+                  String usercurrentid =appointmnet['owner'];
+                  // snapshot.data.docs[index].reference.id.toString();
                   if(appointmnet["doctorID"]==userID && appointmnet["status"]!="pending"){ 
                     print(request);    
                       return 
@@ -292,7 +315,8 @@ Widget listviewappointment(){
                                     //   Icon(Icons.unsubscribe,size: 40,color: Colors.black87)
                                   ],
                             ),
-                            onTap: ()=> navigateTodetail(appointmnet),
+                            // snapshot.data[index]
+                            onTap: ()=> navigateTodetail(docs[index]),
                           ),
                         ),
                     )
