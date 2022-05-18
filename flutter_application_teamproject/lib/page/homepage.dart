@@ -23,7 +23,9 @@ class _MainPageState extends State<MainPage> {
   TimeOfDay selectedTime = TimeOfDay.now();
   String selectedDoctor = "";
   String selectedClinic = "";
+  String selectedClinicID = "";
   String selectedPhone = "";
+  String dropdownvalue = 'Item 1';
   var textController = TextEditingController();
 
   DateTime join(DateTime date, TimeOfDay time) {
@@ -44,9 +46,11 @@ class _MainPageState extends State<MainPage> {
         FirebaseFirestore.instance.collection('appointment').add({
           'created': selectedDate,
           'owner': uid,
+          'status': "pending",
           'symtom': textController.text,
-          'doctorName': selectedDoctor,
+          // 'doctorName': selectedDoctor,
           'clinicName': selectedClinic,
+          'clinicID': selectedClinicID,
           'phone': selectedPhone,
         });
         Fluttertoast.showToast(
@@ -132,9 +136,8 @@ class _MainPageState extends State<MainPage> {
                       image: AssetImage("assets/images/bg2login.png"),
                       fit: BoxFit.cover)),
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection("destination")
-                    .snapshots(),
+                stream:
+                    FirebaseFirestore.instance.collection("clinic").snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
@@ -164,6 +167,10 @@ class _MainPageState extends State<MainPage> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         DateTime showDate = selectedDate;
+                                        List<String> doctors =
+                                            List<String>.from(
+                                                document['doctors']);
+                                        print(doctors);
                                         return AlertDialog(
                                           insetPadding:
                                               const EdgeInsets.symmetric(
@@ -180,10 +187,8 @@ class _MainPageState extends State<MainPage> {
                                                           fontSize: 25,
                                                           fontWeight:
                                                               FontWeight.bold)),
-                                                  subtitle: Text(
-                                                      document["doctorName"] +
-                                                          ",  " +
-                                                          document["type"]),
+                                                  subtitle:
+                                                      Text(document["type"]),
                                                 ),
                                               ),
                                               Align(
@@ -192,6 +197,31 @@ class _MainPageState extends State<MainPage> {
                                               SizedBox(
                                                 height: 40,
                                               ),
+                                              // DropdownButton<String>(
+                                              //   // Initial Value
+                                              //   value: dropdownvalue,
+
+                                              //   // Down Arrow Icon
+                                              //   icon: const Icon(
+                                              //       Icons.keyboard_arrow_down),
+
+                                              //   // Array list of items
+                                              //   items:
+                                              //       doctors.map((String items) {
+                                              //     return DropdownMenuItem<
+                                              //         String>(
+                                              //       value: items,
+                                              //       child: Text(items),
+                                              //     );
+                                              //   }).toList(),
+                                              //   // After selecting the desired option,it will
+                                              //   // change button value to selected value
+                                              //   onChanged: (String? newValue) {
+                                              //     setState(() {
+                                              //       dropdownvalue = newValue!;
+                                              //     });
+                                              //   },
+                                              // ),
                                               Align(
                                                 alignment:
                                                     Alignment.bottomCenter,
@@ -212,12 +242,15 @@ class _MainPageState extends State<MainPage> {
                                                                     color: Colors
                                                                         .black87))),
                                                         onPressed: () {
-                                                          selectedDoctor =
-                                                              document[
-                                                                  "doctorName"];
+                                                          // selectedDoctor =
+                                                          //     document[
+                                                          //         "doctorName"];
                                                           selectedClinic =
                                                               document[
                                                                   "clinicName"];
+                                                          selectedClinicID =
+                                                              document[
+                                                                  "clinicID"];
                                                           selectedPhone =
                                                               document["phone"];
                                                           _appointment(context);
