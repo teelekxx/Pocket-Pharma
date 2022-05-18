@@ -53,12 +53,12 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   CircleAvatar myCircleAvatar() {
     return CircleAvatar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         radius: 30,
         child: FittedBox(
           child: Icon(
             Icons.calendar_month,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ));
   }
@@ -172,7 +172,7 @@ Widget listviewappointment(){
                   Timestamp t = snapshot.data[index].data()['created'];
                   DateTime d =t.toDate();
                   String request = snapshot.data[index].data()['status'];
-                  if(snapshot.data[index].data()["owner"]==userID && snapshot.data[index].data()["status"]=="Accept"){ 
+                  if(snapshot.data[index].data()["owner"]==userID && snapshot.data[index].data()["status"]!="pending" && snapshot.data[index].data()["status"]!="reject"){ 
                     print(request);    
                       return 
                      Padding(
