@@ -29,13 +29,13 @@ RoundedRectangleBorder myRoundedborder() {
 RoundedRectangleBorder myRoundedborderpending() {
     return RoundedRectangleBorder(
          borderRadius:BorderRadius.circular(10),
-        side: BorderSide(color: Colors.yellow.shade600,width: 5));
+        side: BorderSide(color: Colors.black,width: 5));
   }
 
 RoundedRectangleBorder myRoundedborderaccept() {
     return RoundedRectangleBorder(
          borderRadius:BorderRadius.circular(10),
-        side: BorderSide(color: Colors.green,width: 5));
+        side: BorderSide(color: Colors.black,width: 5));
   }
 
 CircleAvatar myCircleAvatar(){
@@ -49,7 +49,7 @@ CircleAvatar myCircleAvatar(){
 
 CircleAvatar myCircleAvatarpending(){
   return CircleAvatar(
-          backgroundColor:Colors.yellow,
+          backgroundColor:Colors.blue,
           radius:30,
           child:FittedBox(child: Icon(Icons.calendar_month,color: Colors.black,)
             ,)
@@ -58,9 +58,9 @@ CircleAvatar myCircleAvatarpending(){
 
 CircleAvatar myCircleAvataraccept(){
   return CircleAvatar(
-          backgroundColor:Colors.green,
+          backgroundColor:Colors.black,
           radius:30,
-          child:FittedBox(child: Icon(Icons.calendar_month,color: Colors.black,)
+          child:FittedBox(child: Icon(Icons.calendar_month,color: Colors.white,)
             ,)
     );
 }
@@ -89,25 +89,19 @@ Widget listviewpending(){
                         child: Ink(
                         // height: 100,
                           color:(request=="pending")?
-                          Colors.yellow[100]:
-                          (request=="Accept")?
-                          Colors.green[100]
+                          Colors.black12
                           :Colors.black26,
                             child: ListTile(
-                            dense: true,
+                            // dense: true,
                             focusColor: Colors.black,
                              shape:(request=="pending")?
-                              myRoundedborderpending():
-                              (request=="Accept")?
-                              myRoundedborderaccept()
+                              myRoundedborderpending()
                               :myRoundedborder()
                              ,
                               leading:(request=="pending")?
-                               myCircleAvatarpending():
-                              (request=="Accept")?
-                              myCircleAvataraccept()
+                               myCircleAvatarpending()
                               :myCircleAvatar(),
-                            title:Text(snapshot.data[index].data()["doctorName"]+" wow"),      
+                            title:Text(snapshot.data[index].data()["doctorName"]),      
                             subtitle: Text(d.toString()),
                             contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
                             trailing:  Wrap(spacing: 12,
@@ -158,12 +152,6 @@ Widget listviewappointment(){
                   child:Text("Loading......")
                 );
               }
-              // if(!snapshot.hasData){   
-              //   print("hi no data");    
-              //   return Center(child: Text("Don't have  data"));
-              // }
-              // Map<String,dynamic> docu =snapshot.data();  
-              // try{  
               else{   
                   return ListView.builder(         
                   shrinkWrap: true,
@@ -179,47 +167,40 @@ Widget listviewappointment(){
                      Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Ink(
-                          color:(request=="pending")?
-                          Colors.yellow[100]:
+                          color:
                           (request=="Accept")?
-                          Colors.green[100]
+                          Colors.black12
                           :Colors.black26,
                             child: ListTile(
                             focusColor: Colors.black,
-                             shape:(request=="pending")?
-                              myRoundedborderpending():
+                             shape:
                               (request=="Accept")?
                               myRoundedborderaccept()
                               :myRoundedborder()
                              ,
-                              leading:(request=="pending")?
-                               myCircleAvatarpending():
+                              leading:
                               (request=="Accept")?
                               myCircleAvataraccept()
                               :myCircleAvatar(),
-                            title:Text(snapshot.data[index].data()["doctorName"]+" wow"),      
-                            // title: RichText(text: TextSpan(children:[
-                            
-                            //   // WidgetSpan(child: Icon(Icons.people)),
-                            //   // TextSpan(text:"hi"+snapshot.data[index].data()["ownerName"])
-                            // ]),
-                            // ),
+                            title:Text(snapshot.data[index].data()["doctorName"]),      
+                           
                             subtitle: Text(d.toString()),
                             contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
                             trailing:  Wrap(spacing: 12,
-                            children: <Widget>[ 
-                                    if(request=="pending")  
-                                      ElevatedButton.icon(
-                                        onPressed: (){print("Click!!!!");}, 
-                                        icon: Icon(Icons.abc,size: 40,color: Colors.yellow.shade700),
-                                        label: Text(""),) ,  
+                            // children: <Widget>[ 
+                            //         if(request=="pending")  
+                            //           ElevatedButton.icon(
+                            //             onPressed: (){print("Click!!!!");}, 
+                            //             icon: Icon(Icons.abc,size: 40,color: Colors.yellow.shade700),
+                            //             label: Text(""),) ,  
                                        
-                                      // Text("Pending...",style: TextStyle(fontSize: 20),),         
-                                    if(request=="Accept")
-                                      Icon(Icons.people_alt,size: 40,color: Colors.green.shade700),
-                                    if(request=="")
-                                      Icon(Icons.unsubscribe,size: 40,color: Colors.black87)
-                                  ],),
+                            //           // Text("Pending...",style: TextStyle(fontSize: 20),),         
+                            //         if(request=="Accept")
+                            //           Icon(Icons.people_alt,size: 40,color: Colors.green.shade700),
+                            //         if(request=="")
+                            //           Icon(Icons.unsubscribe,size: 40,color: Colors.black87)
+                            //       ],
+                            ),
                             onTap: ()=> navigateTodetail(snapshot.data[index]),
                           ),
                         ),
@@ -242,8 +223,11 @@ Widget textpending(){
   margin: const EdgeInsets.all(15.0),
   // padding: const EdgeInsets.all(3.0),
   decoration: BoxDecoration(
-    border: Border.all(color: Colors.black)
+    border: Border.all(color: Colors.black,width: 4),
+    shape: BoxShape.rectangle,
+    borderRadius: BorderRadius.circular(20)
   ),
+  padding:const EdgeInsets.all(15.0) ,
   child: Text('Patient Request',style: TextStyle(fontSize: 30),),
    );
 }
@@ -253,8 +237,11 @@ Widget textshowappointment(){
   margin: const EdgeInsets.all(15.0),
   // padding: const EdgeInsets.all(3.0),
   decoration: BoxDecoration(
-    border: Border.all(color: Colors.black)
+    border: Border.all(color: Colors.black,width: 4),
+    shape: BoxShape.rectangle,
+    borderRadius: BorderRadius.circular(20)
   ),
+  padding:const EdgeInsets.all(15.0) ,
   child: Text('Patient Appointment',style: TextStyle(fontSize: 30),),
    );
 }

@@ -125,6 +125,7 @@ class _WelcomePageState extends State<WelcomePage> {
               screen = [
                 ClinicAppointmnetPage(),
                 ClinicProfilePage(),
+              
               ];
               destination = [
                 NavigationDestination(
