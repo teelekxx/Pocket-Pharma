@@ -2,7 +2,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 class ClinicAppointmnetPage extends StatefulWidget {
@@ -13,7 +15,7 @@ class ClinicAppointmnetPage extends StatefulWidget {
 class _ClinicAppointmnetPageState extends State<ClinicAppointmnetPage> {
   Future getPosts() async{
     var firestore =FirebaseFirestore.instance;
-    QuerySnapshot qn = await firestore.collection("appointment").where("clinicID",isEqualTo:FirebaseAuth.instance.currentUser!.uid).get();
+    QuerySnapshot qn = await firestore.collection("appointment").where("doctorID",isEqualTo:FirebaseAuth.instance.currentUser!.uid).get();
     return qn.docs;
   }
 
@@ -40,9 +42,9 @@ RoundedRectangleBorder myRoundedborderaccept() {
 
 CircleAvatar myCircleAvatar(){
   return CircleAvatar(
-          backgroundColor:Colors.black,
+          backgroundColor:Colors.white,
           radius:30,
-          child:FittedBox(child: Icon(Icons.calendar_month,color: Colors.white,)
+          child:FittedBox(child: Icon(Icons.calendar_month,color: Colors.black,)
             ,)
     );
 }
@@ -66,8 +68,8 @@ CircleAvatar myCircleAvataraccept(){
 }
 
 Widget listviewpending(){
-  return FutureBuilder(
-              future: getPosts(),
+  return StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance.collection("appointment").where("doctorID",isEqualTo:FirebaseAuth.instance.currentUser!.uid).snapshots(),
               builder:(_, AsyncSnapshot snapshot){
               if(snapshot.connectionState == ConnectionState.waiting){
                 return Center(
@@ -76,13 +78,15 @@ Widget listviewpending(){
               }  
                   return ListView.builder(
                   shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder:(_,index){
+                  var docs = snapshot.data.docs;
+                  final appointmnet = docs[index].data()!;
                   String userID =FirebaseAuth.instance.currentUser!.uid;
-                  Timestamp t = snapshot.data[index].data()['created'];
+                  Timestamp t = appointmnet['created'];
                   DateTime d =t.toDate();
-                  String request = snapshot.data[index].data()['status'];
-                  if(snapshot.data[index].data()["clinicID"]==userID && snapshot.data[index].data()["status"]=="pending"){ 
+                  String request = appointmnet['status'];
+                  if(appointmnet["doctorID"]==userID && appointmnet["status"]=="pending"){ 
                     print(request);    
                       return Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -101,7 +105,7 @@ Widget listviewpending(){
                               leading:(request=="pending")?
                                myCircleAvatarpending()
                               :myCircleAvatar(),
-                            title:Text(snapshot.data[index].data()["doctorName"]),      
+                            title:Text(appointmnet["doctorName"]),      
                             subtitle: Text(d.toString()),
                             contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
                             trailing:  Wrap(spacing: 12,
@@ -112,8 +116,15 @@ Widget listviewpending(){
                                           // String ownerID = snapshot.data[index].data()["owner"];
                                           // print(keyID);
                                           // print(ownerID);
-                                          print(snapshot.data[index].reference.id);
-                                          FirebaseFirestore.instance.collection("appointment").doc(snapshot.data[index].reference.id).update({"status":"Accept"});                                       
+                                          print(snapshot.data.docs[index].reference.id);
+                                          FirebaseFirestore.instance.collection("appointment").doc(snapshot.data.docs[index].reference.id).update({"status":"Accept"});
+                                           Fluttertoast.showToast(
+                                            msg: "Accept!",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);                                       
                                           // print("Acceptss");
                                           }, 
                                         icon: Icon(Icons.check,size: 20,color: Colors.yellow.shade700),
@@ -121,7 +132,14 @@ Widget listviewpending(){
                                       ElevatedButton(      
                                         onPressed: (){
                                           print("Click!!!!");
-                                           FirebaseFirestore.instance.collection("appointment").doc(snapshot.data[index].reference.id).update({"status":""});      
+                                           FirebaseFirestore.instance.collection("appointment").doc(snapshot.data.docs[index].reference.id).update({"status":"reject"});
+                                            Fluttertoast.showToast(
+                                            msg: "reject!",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);          
                                           },
                                         child: Text("X"),) ,  
             
@@ -142,10 +160,100 @@ Widget listviewpending(){
             });
 }
 
+//  getage(String petId) async {
+//     DocumentReference documentReference =FirebaseFirestore.instance.collection('Profile').doc(petId);
+//     String specie  ="";
+//     await documentReference.get().then((snapshot) {
+//       specie = (snapshot.data() as Map<String, dynamic>)['age'] as String;
+//     });
+//     print(specie);
+//     return specie;
+//   }
+
+// Future<String> getAge(String userID) async {
+//   String specie  ="";
+//   await Firebase.initializeApp().then((value) => 
+//     FirebaseFirestore.instance.collection('Profile').doc(userID).snapshots().listen(
+//       (event) { 
+//        specie = event.data()!['age'];
+//       //  print(specie);
+//       }
+//       )
+//   );
+//   return specie;
+// }
+
+Future<void> createprescription(BuildContext context,String doctorname,String currentid,String userid,String phonenum) async {
+    var textController = TextEditingController();  
+    final String? des = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: const EdgeInsets.all(10.0),
+              content: Container(
+                  width: double.maxFinite,
+                  child: ListView(children: [
+                    Text("age"),
+                    Text("Please fill the Pill informations",
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold)),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                      controller: textController,
+                      decoration: InputDecoration(
+                        hintText: 'Type here....',
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: 20,
+                      minLines: 1,
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    SizedBox(
+                        width: 100,
+                        height: 50,
+                        child: ElevatedButton(
+                            child: Text("Comfirm"),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: Colors.black87))),
+                            onPressed: () {
+                              FirebaseFirestore.instance.collection('prescription').add({
+                              'createBy':doctorname,
+                              // 'owner': uid,
+                              'fileurl': textController.text,
+                              // 'doctorName': selectedDoctor,
+                              'patientID':userid,
+                              'phone': phonenum,
+                            });
+                            FirebaseFirestore.instance.collection("appointment").doc(currentid).update({"status":"Success"});  
+                            Fluttertoast.showToast(
+                            msg: "Make a Prescription!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                            Navigator.of(context, rootNavigator: true).pop();
+                            }
+                            
+                            
+                            ),
+                        )
+                  ]
+                  )));
+        });
+  }
+
 
 Widget listviewappointment(){
-  return FutureBuilder(
-              future: getPosts(),
+  return StreamBuilder<QuerySnapshot>(
+              stream:FirebaseFirestore.instance.collection("appointment").where("doctorID",isEqualTo:FirebaseAuth.instance.currentUser!.uid).snapshots(),
               builder:(_, AsyncSnapshot snapshot){
               if(snapshot.connectionState == ConnectionState.waiting){
                 return Center(
@@ -153,15 +261,21 @@ Widget listviewappointment(){
                 );
               }
               else{   
+                
                   return ListView.builder(         
                   shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder:(_,index){
+                  var docs = snapshot.data.docs;
+                  final appointmnet = docs[index].data()!;
                   String userID =FirebaseAuth.instance.currentUser!.uid;
-                  Timestamp t = snapshot.data[index].data()['created'];
+                  Timestamp t = appointmnet['created'];
                   DateTime d =t.toDate();
-                  String request = snapshot.data[index].data()['status'];
-                  if(snapshot.data[index].data()["clinicID"]==userID && snapshot.data[index].data()["status"]=="Accept"){ 
+                  String request = appointmnet['status'];
+                  String doctorname=appointmnet["doctorName"];
+                  String usercurrentid =appointmnet['owner'];
+                  // snapshot.data.docs[index].reference.id.toString();
+                  if(appointmnet["doctorID"]==userID && appointmnet["status"]!="pending"){ 
                     print(request);    
                       return 
                      Padding(
@@ -182,26 +296,27 @@ Widget listviewappointment(){
                               (request=="Accept")?
                               myCircleAvataraccept()
                               :myCircleAvatar(),
-                            title:Text(snapshot.data[index].data()["doctorName"]),      
-                           
+                            title:Text(doctorname),                    
                             subtitle: Text(d.toString()),
                             contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
-                            trailing:  Wrap(spacing: 12,
-                            // children: <Widget>[ 
-                            //         if(request=="pending")  
-                            //           ElevatedButton.icon(
-                            //             onPressed: (){print("Click!!!!");}, 
-                            //             icon: Icon(Icons.abc,size: 40,color: Colors.yellow.shade700),
-                            //             label: Text(""),) ,  
+                            trailing:  Wrap(spacing: 10,
+                            children: <Widget>[ 
+                                    if(request=="Accept")  
+                                      ElevatedButton.icon(
+                                        onPressed: (){createprescription(context,doctorname,usercurrentid,appointmnet["owner"].toString(),appointmnet["phone"].toString());}, 
+                                        icon: Icon(Icons.medication,size: 30,color: Colors.black),
+                                        label: Text(""),
+                                        ) ,  
                                        
-                            //           // Text("Pending...",style: TextStyle(fontSize: 20),),         
-                            //         if(request=="Accept")
-                            //           Icon(Icons.people_alt,size: 40,color: Colors.green.shade700),
-                            //         if(request=="")
-                            //           Icon(Icons.unsubscribe,size: 40,color: Colors.black87)
-                            //       ],
+                                      // Text("Pending...",style: TextStyle(fontSize: 20),),         
+                                    // if(request=="Accept")
+                                    //   Icon(Icons.people_alt,size: 40,color: Colors.green.shade700),
+                                    // if(request=="")
+                                    //   Icon(Icons.unsubscribe,size: 40,color: Colors.black87)
+                                  ],
                             ),
-                            onTap: ()=> navigateTodetail(snapshot.data[index]),
+                            // snapshot.data[index]
+                            onTap: ()=> navigateTodetail(docs[index]),
                           ),
                         ),
                     )
@@ -249,7 +364,6 @@ Widget textshowappointment(){
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-
         child: SingleChildScrollView(
             // physics: ScrollPhysics(),
             child: Padding(
@@ -320,14 +434,14 @@ Widget listappointmentdateinformation(){
                            SizedBox(
                             height: 20,
                           ),
-                           Wrap(children: [
-                                Icon(Icons.store,color: Colors.white,),
-                                Text(" Clinic Name: ",style: TextStyle(color:Colors.white,fontSize: 20),),
-                                Text(widget.post["clinicName"],style: TextStyle(color:Colors.white,fontSize: 20),),
-                                  ]),        
-                           SizedBox(
-                            height: 20,
-                          ),
+                          //  Wrap(children: [
+                          //       Icon(Icons.store,color: Colors.white,),
+                          //       Text(" Clinic Name: ",style: TextStyle(color:Colors.white,fontSize: 20),),
+                          //       Text(widget.post["clinicName"],style: TextStyle(color:Colors.white,fontSize: 20),),
+                          //         ]),        
+                          //  SizedBox(
+                          //   height: 20,
+                          // ),
                             Wrap(children: [
                                 Icon(Icons.phone,color: Colors.white,),
                                 Text(" Phone: ",style: TextStyle(color:Colors.white,fontSize: 20),),

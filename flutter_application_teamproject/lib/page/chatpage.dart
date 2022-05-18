@@ -53,12 +53,12 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   CircleAvatar myCircleAvatar() {
     return CircleAvatar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         radius: 30,
         child: FittedBox(
           child: Icon(
             Icons.calendar_month,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ));
   }
@@ -165,30 +165,35 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   Timestamp t = snapshot.data[index].data()['created'];
                   DateTime d = t.toDate();
                   String request = snapshot.data[index].data()['status'];
-                  if (snapshot.data[index].data()["owner"] == userID &&
-                      snapshot.data[index].data()["status"] == "Accept") {
-                    print(request);
-                    return Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Ink(
-                        color: (request == "Accept")
-                            ? Colors.black12
-                            : Colors.black26,
-                        child: ListTile(
-                          focusColor: Colors.black,
-                          shape: (request == "Accept")
-                              ? myRoundedborderaccept()
-                              : myRoundedborder(),
-                          leading: (request == "Accept")
-                              ? myCircleAvataraccept()
-                              : myCircleAvatar(),
-                          title:
-                              Text(snapshot.data[index].data()["doctorName"]),
-                          subtitle: Text(d.toString()),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          trailing: Wrap(
-                            spacing: 12,
+
+                  if(snapshot.data[index].data()["owner"]==userID && snapshot.data[index].data()["status"]!="pending" && snapshot.data[index].data()["status"]!="reject"){ 
+                    print(request);    
+                      return 
+                     Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Ink(
+                          color:
+                         (request=="Accept")?
+                          Colors.black12
+                          :Colors.black26,
+                            child: ListTile(
+                            focusColor: Colors.black,
+                             shape:
+                              (request=="Accept")?
+                              myRoundedborderaccept()
+                              :myRoundedborder()
+                             ,
+                              leading:
+                              (request=="Accept")?
+                              myCircleAvataraccept()
+                              :myCircleAvatar(),
+                            title:Text(snapshot.data[index].data()["doctorName"]),      
+                            subtitle: Text(d.toString()),
+                            contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
+                            trailing:  Wrap(spacing: 12,
+                            ),
+                            onTap: ()=> navigateTodetail(snapshot.data[index]),
+
                           ),
                           onTap: () => navigateTodetail(snapshot.data[index]),
                         ),
