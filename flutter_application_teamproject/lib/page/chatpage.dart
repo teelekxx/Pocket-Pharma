@@ -75,7 +75,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
         ));
   }
 
-   CircleAvatar myCircleAvataraccept() {
+  CircleAvatar myCircleAvataraccept() {
     return CircleAvatar(
         backgroundColor: Colors.black,
         radius: 30,
@@ -87,176 +87,171 @@ class _AppointmentPageState extends State<AppointmentPage> {
         ));
   }
 
-
-Widget listviewpending(){
-  return FutureBuilder(
-              future: getPosts(),
-              builder:(_, AsyncSnapshot snapshot){
-              if(snapshot.connectionState == ConnectionState.waiting){
-                return Center(
-                  child:Text("Loading......")
-                );
-              }
-                  return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
-                  itemBuilder:(_,index){
-                  String userID =FirebaseAuth.instance.currentUser!.uid;
-                  Timestamp t = snapshot.data[index].data()['created'];
-                  DateTime d =t.toDate();
-                  String request = snapshot.data[index].data()['status'];
-                  if(snapshot.data[index].data()["owner"]==userID && snapshot.data[index].data()["status"]=="pending"){ 
-                    print(request);    
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Ink(
-                        // height: 100,
-                          color:(request=="pending")?
-                          Colors.black12
-                          :Colors.black26,
-                            child: ListTile(
-                            // dense: true,
-                            focusColor: Colors.black,
-                             shape:(request=="pending")?
-                              myRoundedborderpending()
-                              :myRoundedborder()
-                             ,
-                              leading:(request=="pending")?
-                               myCircleAvatarpending()
-                              :myCircleAvatar(),
-                            title:Text(snapshot.data[index].data()["doctorName"]),      
-                            subtitle: Text(d.toString()),
-                            contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
-                            trailing:  Wrap(spacing: 12,
-                            // children: <Widget>[ 
-                            //         if(request=="pending")      
-                            //           Icon(Icons.alarm_add,size: 40,color: Colors.yellow.shade700,), 
-                            //           // Text("Pending...",style: TextStyle(fontSize: 20),),         
-                            //         if(request=="Accept")
-                            //           Icon(Icons.people_alt,size: 40,color: Colors.green.shade700),
-                            //         if(request=="")
-                            //           Icon(Icons.unsubscribe,size: 40,color: Colors.black87)
-                            //       ],
-                                  ),
-                            onTap: ()=> navigateTodetail(snapshot.data[index]),
-                          ),
+  Widget listviewpending() {
+    return FutureBuilder(
+        future: getPosts(),
+        builder: (_, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: Text("Loading......"));
+          }
+          return ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (_, index) {
+                String userID = FirebaseAuth.instance.currentUser!.uid;
+                Timestamp t = snapshot.data[index].data()['created'];
+                DateTime d = t.toDate();
+                String request = snapshot.data[index].data()['status'];
+                if (snapshot.data[index].data()["owner"] == userID &&
+                    snapshot.data[index].data()["status"] == "pending") {
+                  print(request);
+                  return Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Ink(
+                      // height: 100,
+                      color: (request == "pending")
+                          ? Colors.black12
+                          : Colors.black26,
+                      child: ListTile(
+                        // dense: true,
+                        focusColor: Colors.black,
+                        shape: (request == "pending")
+                            ? myRoundedborderpending()
+                            : myRoundedborder(),
+                        leading: (request == "pending")
+                            ? myCircleAvatarpending()
+                            : myCircleAvatar(),
+                        title: Text(snapshot.data[index].data()["doctorName"]),
+                        subtitle: Text(d.toString()),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        trailing: Wrap(
+                          spacing: 12,
+                          // children: <Widget>[
+                          //         if(request=="pending")
+                          //           Icon(Icons.alarm_add,size: 40,color: Colors.yellow.shade700,),
+                          //           // Text("Pending...",style: TextStyle(fontSize: 20),),
+                          //         if(request=="Accept")
+                          //           Icon(Icons.people_alt,size: 40,color: Colors.green.shade700),
+                          //         if(request=="")
+                          //           Icon(Icons.unsubscribe,size: 40,color: Colors.black87)
+                          //       ],
                         ),
-                    )
-                      ;     
-                  }
-                  else{
-                    return Center(child: Text(""),);
-                  }
+                        onTap: () => navigateTodetail(snapshot.data[index]),
+                      ),
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: Text(""),
+                  );
                 }
-                ); 
-              
-            });
-}
+              });
+        });
+  }
 
-
-Widget listviewappointment(){
-  return FutureBuilder(
-              future: getPosts(),
-              builder:(_, AsyncSnapshot snapshot){
-              if(snapshot.connectionState == ConnectionState.waiting){
-                return Center(
-                  child:Text("Loading......")
-                );
-              }
-              else{   
-                  return ListView.builder(         
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
-                  itemBuilder:(_,index){
-                  String userID =FirebaseAuth.instance.currentUser!.uid;
+  Widget listviewappointment() {
+    return FutureBuilder(
+        future: getPosts(),
+        builder: (_, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: Text("Loading......"));
+          } else {
+            return ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data!.length,
+                itemBuilder: (_, index) {
+                  String userID = FirebaseAuth.instance.currentUser!.uid;
                   Timestamp t = snapshot.data[index].data()['created'];
-                  DateTime d =t.toDate();
+                  DateTime d = t.toDate();
                   String request = snapshot.data[index].data()['status'];
-                  if(snapshot.data[index].data()["owner"]==userID && snapshot.data[index].data()["status"]=="Accept"){ 
-                    print(request);    
-                      return 
-                     Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Ink(
-                          color:
-                         (request=="Accept")?
-                          Colors.black12
-                          :Colors.black26,
-                            child: ListTile(
-                            focusColor: Colors.black,
-                             shape:
-                              (request=="Accept")?
-                              myRoundedborderaccept()
-                              :myRoundedborder()
-                             ,
-                              leading:
-                              (request=="Accept")?
-                              myCircleAvataraccept()
-                              :myCircleAvatar(),
-                            title:Text(snapshot.data[index].data()["doctorName"]),      
-                            subtitle: Text(d.toString()),
-                            contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
-                            trailing:  Wrap(spacing: 12,
-                            ),
-                            onTap: ()=> navigateTodetail(snapshot.data[index]),
+                  if (snapshot.data[index].data()["owner"] == userID &&
+                      snapshot.data[index].data()["status"] == "Accept") {
+                    print(request);
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Ink(
+                        color: (request == "Accept")
+                            ? Colors.black12
+                            : Colors.black26,
+                        child: ListTile(
+                          focusColor: Colors.black,
+                          shape: (request == "Accept")
+                              ? myRoundedborderaccept()
+                              : myRoundedborder(),
+                          leading: (request == "Accept")
+                              ? myCircleAvataraccept()
+                              : myCircleAvatar(),
+                          title:
+                              Text(snapshot.data[index].data()["doctorName"]),
+                          subtitle: Text(d.toString()),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          trailing: Wrap(
+                            spacing: 12,
                           ),
+                          onTap: () => navigateTodetail(snapshot.data[index]),
                         ),
-                    )
-                      ;     
+                      ),
+                    );
+                  } else {
+                    return Center(
+                      child: Text(""),
+                    );
                   }
-                  else{
-                    return Center(child: Text(""),);
-                  }
-                }
-                ); 
-              }
-            });
-}
+                });
+          }
+        });
+  }
 
-Widget textpending(){
-  return Container(
-   decoration: BoxDecoration(
-    border: Border.all(color: Colors.black,width: 4),
-    shape: BoxShape.rectangle,
-    borderRadius: BorderRadius.circular(20)
-  ),
-  padding:const EdgeInsets.all(15.0) ,
-  child: Text('Pending Appointment',style: TextStyle(fontSize: 30),),
-   );
-}
+  Widget textpending() {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.black, width: 4),
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(20)),
+      padding: const EdgeInsets.all(15.0),
+      child: Text(
+        'Pending Appointment',
+        style: TextStyle(fontSize: 30),
+      ),
+    );
+  }
 
-Widget textshowappointment(){
-  return Container(
-   decoration: BoxDecoration(
-    border: Border.all(color: Colors.black,width: 4),
-    shape: BoxShape.rectangle,
-    borderRadius: BorderRadius.circular(20)
-  ),
-  padding:const EdgeInsets.all(15.0) ,
-  child: Text('Accept Appointment',style: TextStyle(fontSize: 30),),
-   );
-}
+  Widget textshowappointment() {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.black, width: 4),
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(20)),
+      padding: const EdgeInsets.all(15.0),
+      child: Text(
+        'Accept Appointment',
+        style: TextStyle(fontSize: 30),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-
         child: SingleChildScrollView(
-            // physics: ScrollPhysics(),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisSize:  MainAxisSize.min,
+          // physics: ScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 // SizedBox(height: 20,),
                 textpending(),
                 // listviewappointment(),
-                 listviewpending(),
+                listviewpending(),
                 textshowappointment(),
                 listviewappointment(),
               ],
-          ),
             ),
+          ),
         ),
       ),
     );
@@ -278,121 +273,166 @@ class _DetailPageState extends State<DetailPage> {
     // loadinfo();
   }
 
-Widget listappointmentdateinformation(){
-  Timestamp t = widget.post["created"];
-  DateTime d =t.toDate();
-  String formatDate(DateTime dates) => new DateFormat.yMMMMd().format(dates);
-  String formatTimes(DateTime dates) => new DateFormat.jm().format(dates);
-  return Card(
-    child:Container(
-                  width: 360,
-                  height: 500,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.black87),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(   
-                        children: [
-                           SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                             height: 120,
-                             width: 120,
-                             child: const ColoredBox(color: Colors.grey),
-                          ),
-                           SizedBox(
-                            height: 20,
-                          ),
-                           Wrap(children: [
-                                Icon(Icons.person,color: Colors.white,),
-                                Text(" Doctor Name: ",style: TextStyle(color:Colors.white,fontSize: 20),),
-                                 Text(widget.post["doctorName"],style: TextStyle(color:Colors.white,fontSize: 20),),
-                                  ]),
-                           SizedBox(
-                            height: 20,
-                          ),
-                           Wrap(children: [
-                                Icon(Icons.store,color: Colors.white,),
-                                Text(" Clinic Name: ",style: TextStyle(color:Colors.white,fontSize: 20),),
-                                Text(widget.post["clinicName"],style: TextStyle(color:Colors.white,fontSize: 20),),
-                                  ]),        
-                           SizedBox(
-                            height: 20,
-                          ),
-                            Wrap(children: [
-                                Icon(Icons.phone,color: Colors.white,),
-                                Text(" Phone: ",style: TextStyle(color:Colors.white,fontSize: 20),),
-                                Text(widget.post["phone"],style: TextStyle(color:Colors.white,fontSize: 20),),
-                                  ]),        
-                           SizedBox(
-                            height: 20,
-                          ),
-                           Wrap(children: [
-                                Icon(Icons.calendar_month,color: Colors.white,),
-                                Text("  Date:  ",style: TextStyle(color:Colors.white,fontSize: 20),),
-                                Text(formatDate(d),style: TextStyle(color:Colors.white,fontSize: 20),),
-                                  ]),        
-                           SizedBox(
-                            height: 20,
-                          ),
-                          Wrap(children: [
-                                Icon(Icons.timelapse,color: Colors.white,),
-                                Text("  Time: ",style: TextStyle(color:Colors.white,fontSize: 20),),
-                                Text(formatTimes(d),style: TextStyle(color:Colors.white,fontSize: 20),),
-                                  ]),        
-                           SizedBox(
-                            height: 20,
-                          ),
-                          
-                           Wrap(children: [
-                                    Icon(Icons.health_and_safety,color: Colors.white,),
-                                    Text(" Symtom:                      ",style: TextStyle(fontSize: 20,color: Colors.white)),
-                                    // Text(widget.post["symtom"],style: TextStyle(color:Colors.white,fontSize: 20),),
-                                  ]), 
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: SingleChildScrollView(
-                              child:Text(widget.post["symtom"],style: TextStyle(color:Colors.white,fontSize: 20),), ),
-                          )      
-                        ],
-                      ),
-                    )
-                    ),
+  Widget listappointmentdateinformation() {
+    Timestamp t = widget.post["created"];
+    DateTime d = t.toDate();
+    String formatDate(DateTime dates) => new DateFormat.yMMMMd().format(dates);
+    String formatTimes(DateTime dates) => new DateFormat.jm().format(dates);
+    return Card(
+        child: Container(
+      width: 360,
+      height: 500,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15), color: Colors.black87),
+      child: SingleChildScrollView(
+          child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: 120,
+              width: 120,
+              child: const ColoredBox(color: Colors.grey),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Wrap(children: [
+              Icon(
+                Icons.person,
+                color: Colors.white,
+              ),
+              Text(
+                " Doctor Name: ",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              Text(
+                widget.post["doctorName"],
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ]),
+            SizedBox(
+              height: 20,
+            ),
+            Wrap(children: [
+              Icon(
+                Icons.store,
+                color: Colors.white,
+              ),
+              Text(
+                " Clinic Name: ",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              Text(
+                widget.post["doctorName"],
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ]),
+            SizedBox(
+              height: 20,
+            ),
+            Wrap(children: [
+              Icon(
+                Icons.phone,
+                color: Colors.white,
+              ),
+              Text(
+                " Phone: ",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              Text(
+                widget.post["phone"],
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ]),
+            SizedBox(
+              height: 20,
+            ),
+            Wrap(children: [
+              Icon(
+                Icons.calendar_month,
+                color: Colors.white,
+              ),
+              Text(
+                "  Date:  ",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              Text(
+                formatDate(d),
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ]),
+            SizedBox(
+              height: 20,
+            ),
+            Wrap(children: [
+              Icon(
+                Icons.timelapse,
+                color: Colors.white,
+              ),
+              Text(
+                "  Time: ",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              Text(
+                formatTimes(d),
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ]),
+            SizedBox(
+              height: 20,
+            ),
+            Wrap(children: [
+              Icon(
+                Icons.health_and_safety,
+                color: Colors.white,
+              ),
+              Text(" Symtom:                      ",
+                  style: TextStyle(fontSize: 20, color: Colors.white)),
+              // Text(widget.post["symtom"],style: TextStyle(color:Colors.white,fontSize: 20),),
+            ]),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SingleChildScrollView(
+                child: Text(
+                  widget.post["symtom"],
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              ),
+            )
+          ],
+        ),
+      )),
+    ));
+  }
 
-                ) 
-                
-                   
-
-  );
-}
-
-Widget displaytest(){
-  return Text("show pending Appointment",style: TextStyle(fontSize: 100),);
-}
+  Widget displaytest() {
+    return Text(
+      "show pending Appointment",
+      style: TextStyle(fontSize: 100),
+    );
+  }
 
 //   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title:Text("Description"),
-      backgroundColor: Colors.black),
-         body:Center(
-           child: SingleChildScrollView(
-                        child: Column(
-               children: [
-                 listappointmentdateinformation(),
-                  SizedBox(
-                              height: 20,
-                            ),
-                  displaytest()
-               ]
-             ),
-           )
-         ),
-        
+      appBar: AppBar(title: Text("Description"), backgroundColor: Colors.black),
+      body: Center(
+          child: SingleChildScrollView(
+        child: Column(children: [
+          listappointmentdateinformation(),
+          SizedBox(
+            height: 20,
+          ),
+          displaytest()
+        ]),
+      )),
     );
   }
 }

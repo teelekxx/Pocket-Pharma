@@ -49,8 +49,8 @@ class _MainPageState extends State<MainPage> {
           'status': "pending",
           'symtom': textController.text,
           // 'doctorName': selectedDoctor,
-          'clinicName': selectedClinic,
-          'clinicID': selectedClinicID,
+          'doctorName': selectedClinic,
+          'doctorID': selectedClinicID,
           'phone': selectedPhone,
         });
         Fluttertoast.showToast(
@@ -136,8 +136,10 @@ class _MainPageState extends State<MainPage> {
                       image: AssetImage("assets/images/bg2login.png"),
                       fit: BoxFit.cover)),
               child: StreamBuilder<QuerySnapshot>(
-                stream:
-                    FirebaseFirestore.instance.collection("clinic").snapshots(),
+                stream: FirebaseFirestore.instance
+                    .collection("Doctor")
+                    .where('status', isEqualTo: "avaliable")
+                    .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
@@ -149,10 +151,10 @@ class _MainPageState extends State<MainPage> {
                       child: GridView.count(
                         crossAxisCount: 2,
                         children: snapshot.data!.docs.map((document) {
+                          // if(document["status"] == "available"){
                           return Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
                                 boxShadow: [
                                   BoxShadow(
                                       color: Colors.black, spreadRadius: 1),
@@ -167,10 +169,7 @@ class _MainPageState extends State<MainPage> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         DateTime showDate = selectedDate;
-                                        List<String> doctors =
-                                            List<String>.from(
-                                                document['doctors']);
-                                        print(doctors);
+
                                         return AlertDialog(
                                           insetPadding:
                                               const EdgeInsets.symmetric(
@@ -178,24 +177,24 @@ class _MainPageState extends State<MainPage> {
                                                   horizontal: 50),
                                           content: Column(
                                             children: <Widget>[
-                                              Align(
-                                                alignment: Alignment.topLeft,
-                                                child: ListTile(
-                                                  title: Text(
-                                                      document["clinicName"],
-                                                      style: TextStyle(
-                                                          fontSize: 25,
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                  subtitle:
-                                                      Text(document["type"]),
-                                                ),
+                                              ListTile(
+                                                title: Text(
+                                                    document["doctorName"],
+                                                    style: TextStyle(
+                                                        fontSize: 25,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                subtitle:
+                                                    Text(document["type"]),
                                               ),
-                                              Align(
-                                                  alignment: Alignment.center,
-                                                  child: Text(document["des"])),
-                                              SizedBox(
-                                                height: 40,
+                                              Expanded(
+                                                flex: 1,
+                                                child: SingleChildScrollView(
+                                                    child: Wrap(children: [
+                                                  Text(
+                                                    document["des"],
+                                                  ),
+                                                ])),
                                               ),
                                               // DropdownButton<String>(
                                               //   // Initial Value
@@ -247,10 +246,10 @@ class _MainPageState extends State<MainPage> {
                                                           //         "doctorName"];
                                                           selectedClinic =
                                                               document[
-                                                                  "clinicName"];
+                                                                  "doctorName"];
                                                           selectedClinicID =
                                                               document[
-                                                                  "clinicID"];
+                                                                  "doctorID"];
                                                           selectedPhone =
                                                               document["phone"];
                                                           _appointment(context);
@@ -270,12 +269,12 @@ class _MainPageState extends State<MainPage> {
                                       size: 25,
                                     ),
                                     ListTile(
-                                      title: Text(document["clinicName"]),
+                                      title: Text(document["doctorName"]),
                                       subtitle: Text(document["type"]),
                                       // onTap: (){Navigator.push(cntext,MaterialPageRoute(builder: (context)=>HomePage()));},
                                     ),
                                     RatingBarIndicator(
-                                      rating: document["rating"].toDouble(),
+                                      rating: 5,
                                       itemBuilder: (context, index) => Icon(
                                         Icons.star,
                                         color: Colors.amber,
