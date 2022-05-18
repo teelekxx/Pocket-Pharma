@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,12 +27,23 @@ class _MainPageState extends State<MainPage> {
   String selectedClinic = "";
   String selectedClinicID = "";
   String selectedPhone = "";
-  String dropdownvalue = 'Item 1';
+  String currentAge = "";
+  String currentAllergy = "";
+  String currentBlood = "";
+  String currentHeight = "";
+  String currentWeight = "";
+
   var textController = TextEditingController();
 
   DateTime join(DateTime date, TimeOfDay time) {
     return new DateTime(
         date.year, date.month, date.day, time.hour, time.minute);
+  }
+
+  Future getUserdata() async {
+    final snapShot =
+        await FirebaseFirestore.instance.collection('Profile').doc(uid).get();
+    return snapShot.data();
   }
 
   Future<void> _selectTime(BuildContext context) async {
@@ -45,7 +58,13 @@ class _MainPageState extends State<MainPage> {
         selectedDate = join(selectedDate, selectedTime);
         FirebaseFirestore.instance.collection('appointment').add({
           'created': selectedDate,
-          'owner': uid,
+          'ownerID': uid,
+          'ownerName': name,
+          'ownerAge': currentAge,
+          'ownerBlood': currentBlood,
+          'ownerAllergy': currentAllergy,
+          'ownerHeight': currentHeight,
+          'ownerWeight': currentWeight,
           'status': "pending",
           'symtom': textController.text,
           // 'doctorName': selectedDoctor,
@@ -80,6 +99,12 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> _appointment(BuildContext context) async {
+    final userData = await getUserdata();
+    currentAge = userData["age"];
+    currentAllergy = userData["allergy"];
+    currentBlood = userData["blood"];
+    currentHeight = userData["height"];
+    currentWeight = userData["weight"];
     final String? des = await showDialog(
         context: context,
         builder: (BuildContext context) {
