@@ -273,7 +273,8 @@ Widget listviewappointment(){
                   DateTime d =t.toDate();
                   String request = appointmnet['status'];
                   String doctorname=appointmnet["doctorName"];
-                  String usercurrentid =appointmnet['owner'];
+                  String appointmentid =snapshot.data.docs[index].reference.id.toString();
+                  // appointmnet['ownerID'];
                   // snapshot.data.docs[index].reference.id.toString();
                   if(appointmnet["doctorID"]==userID && appointmnet["status"]!="pending"){ 
                     print(request);    
@@ -303,7 +304,9 @@ Widget listviewappointment(){
                             children: <Widget>[ 
                                     if(request=="Accept")  
                                       ElevatedButton.icon(
-                                        onPressed: (){createprescription(context,doctorname,usercurrentid,appointmnet["owner"].toString(),appointmnet["phone"].toString());}, 
+                                        onPressed: (){
+                                          // print(usercurrentid);
+                                          createprescription(context,doctorname,appointmentid,appointmnet["ownerID"].toString(),appointmnet["phone"].toString());}, 
                                         icon: Icon(Icons.medication,size: 30,color: Colors.black),
                                         label: Text(""),
                                         ) ,  

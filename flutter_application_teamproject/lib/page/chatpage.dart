@@ -19,7 +19,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     var firestore = FirebaseFirestore.instance;
     QuerySnapshot qn = await firestore
         .collection("appointment")
-        .where("owner", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where("ownerID", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
     return qn.docs;
   }
@@ -102,7 +102,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 Timestamp t = snapshot.data[index].data()['created'];
                 DateTime d = t.toDate();
                 String request = snapshot.data[index].data()['status'];
-                if (snapshot.data[index].data()["owner"] == userID &&
+                if (snapshot.data[index].data()["ownerID"] == userID &&
                     snapshot.data[index].data()["status"] == "pending") {
                   print(request);
                   return Padding(
@@ -166,7 +166,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   DateTime d = t.toDate();
                   String request = snapshot.data[index].data()['status'];
 
-                  if(snapshot.data[index].data()["owner"]==userID && snapshot.data[index].data()["status"]!="pending" && snapshot.data[index].data()["status"]!="reject"){ 
+                  if(snapshot.data[index].data()["ownerID"]==userID && snapshot.data[index].data()["status"]!="pending" && snapshot.data[index].data()["status"]!="reject"){ 
                     print(request);    
                       return 
                      Padding(
@@ -193,11 +193,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             trailing:  Wrap(spacing: 12,
                             ),
                             onTap: ()=> navigateTodetail(snapshot.data[index]),
-
                           ),
-                          onTap: () => navigateTodetail(snapshot.data[index]),
                         ),
-                      ),
+                      
                     );
                   } else {
                     return Center(
@@ -322,23 +320,23 @@ class _DetailPageState extends State<DetailPage> {
             SizedBox(
               height: 20,
             ),
-            Wrap(children: [
-              Icon(
-                Icons.store,
-                color: Colors.white,
-              ),
-              Text(
-                " Clinic Name: ",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              Text(
-                widget.post["doctorName"],
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-            ]),
-            SizedBox(
-              height: 20,
-            ),
+            // Wrap(children: [
+            //   Icon(
+            //     Icons.store,
+            //     color: Colors.white,
+            //   ),
+            //   Text(
+            //     " Clinic Name: ",
+            //     style: TextStyle(color: Colors.white, fontSize: 20),
+            //   ),
+            //   Text(
+            //     widget.post["doctorName"],
+            //     style: TextStyle(color: Colors.white, fontSize: 20),
+            //   ),
+            // ]),
+            // SizedBox(
+            //   height: 20,
+            // ),
             Wrap(children: [
               Icon(
                 Icons.phone,
