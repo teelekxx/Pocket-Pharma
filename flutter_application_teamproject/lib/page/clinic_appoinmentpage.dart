@@ -105,7 +105,7 @@ Widget listviewpending(){
                               leading:(request=="pending")?
                                myCircleAvatarpending()
                               :myCircleAvatar(),
-                            title:Text(appointmnet["doctorName"]),      
+                            title:Text(appointmnet["ownerName"]),      
                             subtitle: Text(d.toString()),
                             contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
                             trailing:  Wrap(spacing: 12,
@@ -144,7 +144,7 @@ Widget listviewpending(){
                                         child: Text("X"),) ,  
             
                                   ],),
-                            onTap: ()=> navigateTodetail(snapshot.data[index]),
+                            onTap: ()=> navigateTodetail(docs[index]),
                           ),
                         ),
                     )
@@ -273,7 +273,8 @@ Widget listviewappointment(){
                   DateTime d =t.toDate();
                   String request = appointmnet['status'];
                   String doctorname=appointmnet["doctorName"];
-                  String appointmentid =snapshot.data.docs[index].reference.id.toString();
+                  String ownername =appointmnet["ownerName"];
+                  String appointmentid =snapshot.data!.docs[index].id;
                   // appointmnet['ownerID'];
                   // snapshot.data.docs[index].reference.id.toString();
                   if(appointmnet["doctorID"]==userID && appointmnet["status"]!="pending"){ 
@@ -297,7 +298,7 @@ Widget listviewappointment(){
                               (request=="Accept")?
                               myCircleAvataraccept()
                               :myCircleAvatar(),
-                            title:Text(doctorname),                    
+                            title:Text(ownername),                    
                             subtitle: Text(d.toString()),
                             contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
                             trailing:  Wrap(spacing: 10,
@@ -305,7 +306,7 @@ Widget listviewappointment(){
                                     if(request=="Accept")  
                                       ElevatedButton.icon(
                                         onPressed: (){
-                                          // print(usercurrentid);
+                                          print(appointmentid);
                                           createprescription(context,doctorname,appointmentid,appointmnet["ownerID"].toString(),appointmnet["phone"].toString());}, 
                                         icon: Icon(Icons.medication,size: 30,color: Colors.black),
                                         label: Text(""),
@@ -409,14 +410,17 @@ Widget listappointmentdateinformation(){
   String formatDate(DateTime dates) => new DateFormat.yMMMMd().format(dates);
   String formatTimes(DateTime dates) => new DateFormat.jm().format(dates);
   return Card(
+    
     child:Container(
+      // alignment:Alignment.bottomLeft ,
                   width: 360,
-                  height: 500,
+                  height: 560,
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.black87),
                   child: SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(   
+                      child: Column( 
+                        // mainAxisAlignment: MainAxisAlignment.start,  
                         children: [
                            SizedBox(
                             height: 20,
@@ -429,33 +433,27 @@ Widget listappointmentdateinformation(){
                            SizedBox(
                             height: 20,
                           ),
-                           Wrap(children: [
+                           Wrap(
+                            //  alignment: WrapAlignment.start,
+                             children: [
                                 Icon(Icons.person,color: Colors.white,),
-                                Text(" Doctor Name: ",style: TextStyle(color:Colors.white,fontSize: 20),),
-                                 Text(widget.post["doctorName"],style: TextStyle(color:Colors.white,fontSize: 20),),
+                                Text(" Patient Name: ",style: TextStyle(color:Colors.white,fontSize: 20),),
+                                 Text(widget.post["ownerName"],style: TextStyle(color:Colors.white,fontSize: 20),),
                                   ]),
                            SizedBox(
                             height: 20,
                           ),
-                          //  Wrap(children: [
-                          //       Icon(Icons.store,color: Colors.white,),
-                          //       Text(" Clinic Name: ",style: TextStyle(color:Colors.white,fontSize: 20),),
-                          //       Text(widget.post["clinicName"],style: TextStyle(color:Colors.white,fontSize: 20),),
-                          //         ]),        
-                          //  SizedBox(
-                          //   height: 20,
-                          // ),
                             Wrap(children: [
-                                Icon(Icons.phone,color: Colors.white,),
-                                Text(" Phone: ",style: TextStyle(color:Colors.white,fontSize: 20),),
-                                Text(widget.post["phone"],style: TextStyle(color:Colors.white,fontSize: 20),),
+                                Icon(Icons.cake,color: Colors.white,),
+                                Text(" Age: ",style: TextStyle(color:Colors.white,fontSize: 20),),
+                                Text(widget.post["ownerAge"],style: TextStyle(color:Colors.white,fontSize: 20),),
                                   ]),        
                            SizedBox(
                             height: 20,
                           ),
                            Wrap(children: [
                                 Icon(Icons.calendar_month,color: Colors.white,),
-                                Text("  Date:  ",style: TextStyle(color:Colors.white,fontSize: 20),),
+                                Text("  Date: ",style: TextStyle(color:Colors.white,fontSize: 20),),
                                 Text(formatDate(d),style: TextStyle(color:Colors.white,fontSize: 20),),
                                   ]),        
                            SizedBox(
@@ -469,10 +467,33 @@ Widget listappointmentdateinformation(){
                            SizedBox(
                             height: 20,
                           ),
-                          
+                          Wrap(children: [
+                                Icon(Icons.bloodtype,color: Colors.white,),
+                                Text(" Blood: ",style: TextStyle(color:Colors.white,fontSize: 20),),
+                                Text(widget.post["ownerBlood"],style: TextStyle(color:Colors.white,fontSize: 20),),
+                                  ]),        
+                           SizedBox(
+                            height: 20,
+                          ),
+                          Wrap(children: [
+                                Icon(Icons.people,color: Colors.white,),
+                                Text("  Weight and Height: ",style: TextStyle(color:Colors.white,fontSize: 20),),
+                                Text(widget.post["ownerWeight"]+", "+widget.post["ownerHeight"],style: TextStyle(color:Colors.white,fontSize: 20),),
+                                  ]),        
+                           SizedBox(
+                            height: 20,
+                          ),
+                           Wrap(children: [
+                                    Icon(Icons.sick,color: Colors.white,),
+                                    Text(" Allergy:",style: TextStyle(fontSize: 20,color: Colors.white)),
+                                    Text(widget.post["ownerAllergy"],style: TextStyle(color:Colors.white,fontSize: 20),),
+                                  ]), 
+                          SizedBox(
+                            height: 20,
+                          ),
                            Wrap(children: [
                                     Icon(Icons.health_and_safety,color: Colors.white,),
-                                    Text(" Symtom:                      ",style: TextStyle(fontSize: 20,color: Colors.white)),
+                                    Text(" Symtom    ",style: TextStyle(fontSize: 20,color: Colors.white)),
                                     // Text(widget.post["symtom"],style: TextStyle(color:Colors.white,fontSize: 20),),
                                   ]), 
                           SizedBox(
@@ -504,7 +525,7 @@ Widget displaytest(){
     return Scaffold(
       appBar: AppBar(title:Text("Description"),
       backgroundColor: Colors.black),
-         body:Center(
+         body:Container(
            child: SingleChildScrollView(
                         child: Column(
                children: [
