@@ -183,8 +183,9 @@ Widget listviewpending(){
 //   return specie;
 // }
 
-Future<void> createprescription(BuildContext context,String doctorname,String currentid,String userid,String phonenum) async {
+Future<void> createprescription(BuildContext context,String doctorname,String currentid,String userid,String phonenum,String allergy,String username,String userage,String userWeight, String userHeight) async {
     var textController = TextEditingController();  
+    DateTime currentphonedate = DateTime.now();
     final String? des = await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -193,10 +194,26 @@ Future<void> createprescription(BuildContext context,String doctorname,String cu
               content: Container(
                   width: double.maxFinite,
                   child: ListView(children: [
-                    Text("age"),
-                    Text("Please fill the Pill informations",
+                    Text("Patient Prescription",textAlign: TextAlign.center,style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold)),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text("Patient information:",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold)),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    
+                    Text(" Name: ${username}",style: TextStyle(fontSize: 20)),
+                    Text(" Age: ${userage}",style: TextStyle(fontSize: 20)),
+                    Text(" Allergy: ${allergy}",style: TextStyle(fontSize: 20)),
+                    Text(" Weight nad Height: ${userWeight} , ${userHeight}",style: TextStyle(fontSize: 20)),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text("Rx Prescription",
                         style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold)),
+                            fontSize: 22, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                     SizedBox(
                       height: 20,
                     ),
@@ -226,8 +243,9 @@ Future<void> createprescription(BuildContext context,String doctorname,String cu
                               FirebaseFirestore.instance.collection('prescription').add({
                               'createBy':doctorname,
                               // 'owner': uid,
-                              'fileurl': textController.text,
+                              'rxPrescription': textController.text,
                               // 'doctorName': selectedDoctor,
+                              'dateTime':currentphonedate,
                               'patientID':userid,
                               'phone': phonenum,
                             });
@@ -275,6 +293,13 @@ Widget listviewappointment(){
                   String doctorname=appointmnet["doctorName"];
                   String ownername =appointmnet["ownerName"];
                   String appointmentid =snapshot.data!.docs[index].id;
+                  String currentuser =appointmnet["ownerID"].toString();
+                  String phone =appointmnet["phone"].toString();
+                  String allergy =appointmnet["ownerAllergy"].toString();
+                  String userName =appointmnet["ownerName"].toString();
+                  String userAge =appointmnet["ownerAge"].toString();
+                  String userWight =appointmnet["ownerWeight"].toString();
+                  String userHeight =appointmnet["ownerHeight"].toString();
                   // appointmnet['ownerID'];
                   // snapshot.data.docs[index].reference.id.toString();
                   if(appointmnet["doctorID"]==userID && appointmnet["status"]!="pending"){ 
@@ -307,7 +332,7 @@ Widget listviewappointment(){
                                       ElevatedButton.icon(
                                         onPressed: (){
                                           print(appointmentid);
-                                          createprescription(context,doctorname,appointmentid,appointmnet["ownerID"].toString(),appointmnet["phone"].toString());}, 
+                                          createprescription(context,doctorname,appointmentid,currentuser,phone,allergy,userName,userAge,userWight,userHeight);}, 
                                         icon: Icon(Icons.medication,size: 30,color: Colors.black),
                                         label: Text(""),
                                         ) ,  
