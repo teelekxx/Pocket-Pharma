@@ -26,7 +26,7 @@ class UserWidget extends StatelessWidget {
             return Column(
               children: [
                 Text(
-                  name!,
+                  document["name"],
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                 ),
                 const SizedBox(height: 4),

@@ -27,6 +27,7 @@ class _MainPageState extends State<MainPage> {
   String selectedClinic = "";
   String selectedClinicID = "";
   String selectedPhone = "";
+  String currentName = "";
   String currentAge = "";
   String currentAllergy = "";
   String currentBlood = "";
@@ -59,7 +60,7 @@ class _MainPageState extends State<MainPage> {
         FirebaseFirestore.instance.collection('appointment').add({
           'created': selectedDate,
           'ownerID': uid,
-          'ownerName': name,
+          'ownerName': currentName,
           'ownerAge': currentAge,
           'ownerBlood': currentBlood,
           'ownerAllergy': currentAllergy,
@@ -100,6 +101,7 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> _appointment(BuildContext context) async {
     final userData = await getUserdata();
+    currentName = userData["name"];
     currentAge = userData["age"];
     currentAllergy = userData["allergy"];
     currentBlood = userData["blood"];
@@ -163,7 +165,7 @@ class _MainPageState extends State<MainPage> {
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection("Doctor")
-                    .where('status', isEqualTo: "avaliable")
+                    .orderBy("order", descending: true)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
@@ -172,11 +174,21 @@ class _MainPageState extends State<MainPage> {
                     );
                   } else {
                     return Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(3.0),
                       child: GridView.count(
+                        childAspectRatio: (0.75),
                         crossAxisCount: 2,
                         children: snapshot.data!.docs.map((document) {
                           // if(document["status"] == "available"){
+                          var icon;
+                          bool available = true;
+
+                          if (document["status"] == "available") {
+                            icon = Icons.done;
+                          } else {
+                            icon = Icons.hourglass_bottom;
+                            available = false;
+                          }
                           return Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -266,18 +278,41 @@ class _MainPageState extends State<MainPage> {
                                                                     color: Colors
                                                                         .black87))),
                                                         onPressed: () {
-                                                          // selectedDoctor =
-                                                          //     document[
-                                                          //         "doctorName"];
-                                                          selectedClinic =
-                                                              document[
-                                                                  "doctorName"];
-                                                          selectedClinicID =
-                                                              document[
-                                                                  "doctorID"];
-                                                          selectedPhone =
-                                                              document["phone"];
-                                                          _appointment(context);
+                                                          if (document[
+                                                                  "status"] ==
+                                                              "available") {
+                                                            selectedClinic =
+                                                                document[
+                                                                    "doctorName"];
+                                                            selectedClinicID =
+                                                                document[
+                                                                    "doctorID"];
+                                                            selectedPhone =
+                                                                document[
+                                                                    "phone"];
+                                                            _appointment(
+                                                                context);
+                                                          } else {
+                                                            Fluttertoast.showToast(
+                                                                msg:
+                                                                    "This Doctor is unavailable",
+                                                                toastLength: Toast
+                                                                    .LENGTH_SHORT,
+                                                                gravity:
+                                                                    ToastGravity
+                                                                        .CENTER,
+                                                                timeInSecForIosWeb:
+                                                                    1,
+                                                                textColor:
+                                                                    Colors
+                                                                        .white,
+                                                                fontSize: 16.0);
+                                                            Navigator.of(
+                                                                    context,
+                                                                    rootNavigator:
+                                                                        true)
+                                                                .pop();
+                                                          }
                                                           // _selectDate(context);
                                                         })),
                                               )
@@ -288,26 +323,49 @@ class _MainPageState extends State<MainPage> {
                                 },
                                 child: Column(
                                   children: [
-                                    Icon(
-                                      Icons.add_moderator,
-                                      color: Colors.green,
-                                      size: 25,
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Image.network(document["picture"],
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.fill),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          available
+                                              ? 'available'
+                                              : "Unavailable",
+                                          style: TextStyle(
+                                            color: available
+                                                ? Colors.green
+                                                : Colors.red,
+                                          ),
+                                        ),
+                                        Icon(
+                                          icon,
+                                          color: available
+                                              ? Colors.green
+                                              : Colors.red,
+                                        ),
+                                      ],
                                     ),
                                     ListTile(
                                       title: Text(document["doctorName"]),
                                       subtitle: Text(document["type"]),
                                       // onTap: (){Navigator.push(cntext,MaterialPageRoute(builder: (context)=>HomePage()));},
                                     ),
-                                    RatingBarIndicator(
-                                      rating: 5,
-                                      itemBuilder: (context, index) => Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      itemCount: 5,
-                                      itemSize: 20.0,
-                                      direction: Axis.horizontal,
-                                    ),
+                                    // RatingBarIndicator(
+                                    //   rating: 5,
+                                    //   itemBuilder: (context, index) => Icon(
+                                    //     Icons.star,
+                                    //     color: Colors.amber,
+                                    //   ),
+                                    //   itemCount: 5,
+                                    //   itemSize: 20.0,
+                                    //   direction: Axis.horizontal,
+                                    // ),
                                   ],
                                 ),
                               )));

@@ -12,6 +12,8 @@ import 'package:flutter_application_teamproject/page/profilepage.dart';
 import 'package:flutter_application_teamproject/page/startpage.dart';
 import 'package:flutter_application_teamproject/page/clinic_homepage.dart';
 import 'package:flutter_application_teamproject/page/clinic_profilepage.dart';
+import '../data/user.dart';
+import '../utils/user_preferences.dart';
 
 class WelcomePage extends StatefulWidget {
   @override
@@ -59,7 +61,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
   Future<bool> checkClinic() async {
     final snapShot =
-        await FirebaseFirestore.instance.collection('clinic').doc(uid).get();
+        await FirebaseFirestore.instance.collection('Doctor').doc(uid).get();
 
     return snapShot.exists;
     // screen = [
@@ -125,7 +127,6 @@ class _WelcomePageState extends State<WelcomePage> {
               screen = [
                 ClinicAppointmnetPage(),
                 ClinicProfilePage(),
-              
               ];
               destination = [
                 NavigationDestination(
