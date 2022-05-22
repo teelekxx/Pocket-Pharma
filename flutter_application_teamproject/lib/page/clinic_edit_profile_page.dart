@@ -12,6 +12,7 @@ import 'package:flutter_application_teamproject/widget/appbar_widget.dart';
 import 'package:flutter_application_teamproject/widget/button_widget.dart';
 import 'package:flutter_application_teamproject/widget/profile_widget.dart';
 import 'package:flutter_application_teamproject/widget/textfield_widget.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart';
 
 class ClinicEditProfilePage extends StatefulWidget {
@@ -22,6 +23,8 @@ class ClinicEditProfilePage extends StatefulWidget {
 class _ClinicEditProfilePageState extends State<ClinicEditProfilePage> {
   Users? user;
   final auth = FirebaseAuth.instance;
+  var _newImage;
+  var _firePath;
 
   @override
   void initState() {
@@ -50,9 +53,9 @@ class _ClinicEditProfilePageState extends State<ClinicEditProfilePage> {
               final directory = await getApplicationDocumentsDirectory();
               final name = basename(image.path);
               final imageFile = File('${directory.path}/$name');
-              final newImage = await File(image.path).copy(imageFile.path);
+              _newImage = await File(image.path).copy(imageFile.path);
 
-              setState(() => user = user?.copy(imagePath: newImage.path));
+              setState(() => user = user?.copy(imagePath: _newImage.path));
             },
           ),
           const SizedBox(height: 24),
@@ -74,11 +77,6 @@ class _ClinicEditProfilePageState extends State<ClinicEditProfilePage> {
             onChanged: (type) => user = user?.copy(type: type),
           ),
           const SizedBox(height: 24),
-          TextFieldWidget(
-            label: 'Status',
-            text: "",
-            onChanged: (status) => user = user?.copy(status: status),
-          ),
           const SizedBox(height: 24),
           TextFieldWidget(
             label: 'Description',
@@ -89,9 +87,30 @@ class _ClinicEditProfilePageState extends State<ClinicEditProfilePage> {
           const SizedBox(height: 24),
           ButtonWidget(
             text: 'Save',
-            onClicked: () {
+            onClicked: () async {
               UserPreferences.setUser(user!);
               Navigator.of(context).pop();
+              if (_newImage != null) {
+                final fileName = basename(_newImage.path);
+                final destination = 'files/$fileName';
+                try {
+                  final ref = firebase_storage.FirebaseStorage.instance
+                      .ref(destination)
+                      .child('file/');
+                  await ref.putFile(_newImage);
+
+                  var imageUrl = await ref.getDownloadURL();
+                  _firePath = imageUrl.toString();
+                  FirebaseFirestore.instance
+                      .collection("Doctor")
+                      .doc(auth.currentUser!.uid)
+                      .update({
+                    "picture": _firePath,
+                  });
+                } catch (e) {
+                  print(e);
+                }
+              }
               final docUser = FirebaseFirestore.instance
                   .collection("Doctor")
                   .doc(auth.currentUser!.uid);
@@ -100,7 +119,6 @@ class _ClinicEditProfilePageState extends State<ClinicEditProfilePage> {
                 'des': user!.about,
                 'phone': user!.phone,
                 'type': user!.type,
-                'status': user!.status,
               });
             },
           ),
