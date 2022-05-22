@@ -2,16 +2,19 @@ import 'package:flutter/src/widgets/framework.dart';
 
 class Users {
   final String imagePath;
-  final String name;
-  final String email;
-  final String about;
+  final String? name;
+  final String? email;
+  final String? about;
   final bool isDarkMode;
-  final String weight;
-  final String height;
-  final String blood;
-  final String allergy;
-  final String medicalcondition;
-  final String age;
+  final String? weight;
+  final String? height;
+  final String? blood;
+  final String? allergy;
+  final String? medicalcondition;
+  final String? age;
+  final String? phone;
+  final String? type;
+  final String? status;
 
   const Users({
     required this.imagePath,
@@ -25,6 +28,9 @@ class Users {
     required this.allergy,
     required this.medicalcondition,
     required this.age,
+    required this.phone,
+    required this.type,
+    required this.status,
   });
 
   Users copy({
@@ -39,6 +45,9 @@ class Users {
     String? allergy,
     String? medicalcondition,
     String? age,
+    String? phone,
+    String? type,
+    String? status,
   }) =>
       Users(
         imagePath: imagePath ?? this.imagePath,
@@ -52,6 +61,9 @@ class Users {
         allergy: allergy ?? this.allergy,
         medicalcondition: medicalcondition ?? this.medicalcondition,
         age: age ?? this.age,
+        phone: phone ?? this.phone,
+        type: type ?? this.type,
+        status: status ?? this.status,
       );
 
   static Users fromJson(Map<String, dynamic> json) => Users(
@@ -66,6 +78,9 @@ class Users {
         allergy: json['allergy'],
         medicalcondition: json['medicalcondition'],
         age: json['age'],
+        phone: json['phone'],
+        type: json['type'],
+        status: json['status'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -80,6 +95,9 @@ class Users {
         'allergy': allergy,
         'medicalcondition': medicalcondition,
         'age': age,
+        'phone': phone,
+        'type': type,
+        'status': status,
       };
 
   map(Widget Function(Users user) buildUser) {}

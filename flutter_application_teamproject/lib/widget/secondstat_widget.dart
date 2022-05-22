@@ -24,12 +24,12 @@ class SecondStatWidget extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                buildButton(context, document["blood"], 'Blood Type'),
+                buildButton(context, 'Blood Type', document["blood"]),
                 buildDivider(),
-                buildButton(context, document["allergy"], 'Allergy'),
+                buildButton(context, 'Allergy', document["allergy"]),
                 buildDivider(),
                 buildButton(
-                    context, document["medicalcondition"], 'Medical Condition'),
+                    context, 'Conditions', document["medicalcondition"]),
               ],
             );
           }).toList(),

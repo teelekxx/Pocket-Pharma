@@ -4,14 +4,14 @@ import 'package:flutter_application_teamproject/data/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-class StatWidget extends StatelessWidget {
+class DoctorStatWidget extends StatelessWidget {
   final auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection("Profile")
-          .where('user_id', isEqualTo: auth.currentUser!.uid)
+          .collection("Doctor")
+          .where('doctorID', isEqualTo: auth.currentUser!.uid)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
@@ -24,11 +24,11 @@ class StatWidget extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                buildButton(context, 'Age', document["age"]),
+                buildButton(context, 'Phone', document["phone"]),
                 buildDivider(),
-                buildButton(context, 'Weight', document["weight"]),
+                buildButton(context, 'Type', document["type"]),
                 buildDivider(),
-                buildButton(context, 'Height', document["height"]),
+                buildButton(context, 'Status', document["status"]),
               ],
             );
           }).toList(),

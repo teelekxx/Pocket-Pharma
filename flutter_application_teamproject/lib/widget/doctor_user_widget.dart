@@ -4,7 +4,7 @@ import 'package:flutter_application_teamproject/data/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-class UserWidget extends StatelessWidget {
+class DoctorUserWidget extends StatelessWidget {
   final auth = FirebaseAuth.instance;
   final uid = FirebaseAuth.instance.currentUser?.uid;
   final name = FirebaseAuth.instance.currentUser?.displayName;
@@ -12,8 +12,8 @@ class UserWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection("Profile")
-          .where('user_id', isEqualTo: auth.currentUser!.uid)
+          .collection("Doctor")
+          .where('doctorID', isEqualTo: auth.currentUser!.uid)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
@@ -26,7 +26,7 @@ class UserWidget extends StatelessWidget {
             return Column(
               children: [
                 Text(
-                  document["name"],
+                  document["doctorName"],
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                 ),
                 const SizedBox(height: 4),
