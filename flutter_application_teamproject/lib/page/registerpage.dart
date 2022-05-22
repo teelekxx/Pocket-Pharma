@@ -306,7 +306,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   .doc(FirebaseAuth.instance
                                                       .currentUser!.uid)
                                                   .set({
-                                                'name': name,
                                                 'allergy': '',
                                                 'age': '',
                                                 'blood': '',
