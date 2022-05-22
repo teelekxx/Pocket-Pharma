@@ -9,7 +9,7 @@ class UserPreferences {
   static const _keyUser = 'user';
   static const myUser = Users(
     imagePath:
-        'https://www.pngitem.com/pimgs/m/524-5246388_anonymous-user-hd-png-download.png',
+        'https://www.baxterip.com.au/wp-content/uploads/2019/02/anonymous.jpg',
     name: 'User',
     email: 'sarah.abs@gmail.com',
     about: 'No Description',
@@ -20,6 +20,9 @@ class UserPreferences {
     allergy: 'None',
     medicalcondition: 'None',
     age: "21",
+    phone: "08452556721",
+    type: 'Dentist',
+    status: 'available',
   );
 
   static Future init() async =>

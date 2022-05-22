@@ -30,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: buildAppBar(context),
       body: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 22),
         physics: BouncingScrollPhysics(),
         children: [
           ProfileWidget(

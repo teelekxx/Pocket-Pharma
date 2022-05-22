@@ -4,16 +4,14 @@ import 'package:flutter_application_teamproject/data/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-class UserWidget extends StatelessWidget {
+class DoctorDescriptionWidget extends StatelessWidget {
   final auth = FirebaseAuth.instance;
-  final uid = FirebaseAuth.instance.currentUser?.uid;
-  final name = FirebaseAuth.instance.currentUser?.displayName;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection("Profile")
-          .where('user_id', isEqualTo: auth.currentUser!.uid)
+          .collection("Doctor")
+          .where('doctorID', isEqualTo: auth.currentUser!.uid)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
@@ -23,18 +21,22 @@ class UserWidget extends StatelessWidget {
         }
         return Column(
           children: snapshot.data!.docs.map((document) {
-            return Column(
-              children: [
-                Text(
-                  document["name"],
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "${auth.currentUser!.email}",
-                  style: TextStyle(color: Colors.grey),
-                )
-              ],
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 48),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Profile Description',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    document["des"],
+                    style: TextStyle(fontSize: 16, height: 1.4),
+                  ),
+                ],
+              ),
             );
           }).toList(),
         );
