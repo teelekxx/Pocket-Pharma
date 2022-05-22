@@ -36,13 +36,13 @@ class _HomePageState extends State<HomePage> {
               child: Column(
               children:[
                 SizedBox(height: 10,),
-                Image.asset("assets/images/pocketphamaw.png"),
+                Image.asset("assets/images/doctorphama.png"),
                 SizedBox(height: 20,),
                 Image.asset("assets/images/medicine.png",height: 70,),
                 Padding(
                   padding: const EdgeInsets.all(30),
-                  child: Text(":The most worldwide medicine app that will provide the best soluton for customer"
-                  ,style: TextStyle(fontSize: 20,color: Colors.black),),
+                  child: Text("The most worldwide medicine app that will provide the best soluton for Patient"
+                  ,style: TextStyle(fontSize: 24,color: Colors.black,fontWeight: FontWeight.bold),textAlign:TextAlign.center,),
                 ),
                 // SizedBox(height: 10,),
                 // Image.asset("assets/images/pharmacy.png",height: 70,),
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                 //   child: Text("The most worldwide medicine app that will provide the best soluton for customer"
                 //   ,style: TextStyle(fontSize: 20,color: Colors.black),),
                 // ),
-                SizedBox(height: 50,),
+                SizedBox(height: 30,),
 
                   SizedBox(
                   width: 300,
