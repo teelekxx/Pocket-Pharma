@@ -210,10 +210,14 @@ class _MainPageState extends State<MainPage> {
                                         return AlertDialog(
                                           insetPadding:
                                               const EdgeInsets.symmetric(
-                                                  vertical: 200,
+                                                  vertical: 150,
                                                   horizontal: 50),
                                           content: Column(
                                             children: <Widget>[
+                                              Image.network(document["picture"],
+                                                  width: 100,
+                                                  height: 100,
+                                                  fit: BoxFit.fill),
                                               ListTile(
                                                 title: Text(
                                                     document["doctorName"],
