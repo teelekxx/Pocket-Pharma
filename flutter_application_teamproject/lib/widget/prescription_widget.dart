@@ -4,7 +4,7 @@ import 'package:flutter_application_teamproject/data/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-class UserWidget extends StatelessWidget {
+class PrescriptionWidget extends StatelessWidget {
   final auth = FirebaseAuth.instance;
   final uid = FirebaseAuth.instance.currentUser?.uid;
   final name = FirebaseAuth.instance.currentUser?.displayName;
@@ -12,8 +12,8 @@ class UserWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection("Profile")
-          .where('user_id', isEqualTo: auth.currentUser!.uid)
+          .collection("prescription")
+          .where('patientID', isEqualTo: auth.currentUser!.uid)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
@@ -23,18 +23,18 @@ class UserWidget extends StatelessWidget {
         }
         return Column(
           children: snapshot.data!.docs.map((document) {
-            return Column(
-              children: [
-                Text(
-                  name!,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "${auth.currentUser!.email}",
-                  style: TextStyle(color: Colors.grey),
-                )
-              ],
+            return Card(
+              child: ListTile(
+                title: Text(document["createBy"]),
+                subtitle: Text("Prescriptions: \n- " +
+                    document["rxPrescription"] +
+                    "\n"
+                        "Phone: " +
+                    document["phone"] +
+                    "\n"
+                        "Date: " +
+                    document["dateTime"].toDate().toString()),
+              ),
             );
           }).toList(),
         );

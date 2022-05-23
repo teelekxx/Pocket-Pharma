@@ -13,7 +13,7 @@ import 'package:flutter_application_teamproject/widget/description_widget.dart';
 import 'package:flutter_application_teamproject/widget/user_widget.dart';
 import 'package:flutter_application_teamproject/widget/stat_widget.dart';
 import 'package:flutter_application_teamproject/widget/profile_widget.dart';
-
+import 'package:flutter_application_teamproject/widget/prescription_widget.dart';
 import '../data/user.dart';
 import '../widget/secondstat_widget.dart';
 
@@ -82,6 +82,12 @@ class _ProfilePageState extends State<ProfilePage> {
           SecondStatWidget(),
           const SizedBox(height: 48),
           DescriptionWidget(),
+          const SizedBox(height: 24),
+          Text(
+            'Prescription History',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          PrescriptionWidget(),
         ],
       ),
     );
