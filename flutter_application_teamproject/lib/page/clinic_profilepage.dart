@@ -101,6 +101,7 @@ class _ClinicProfilePageState extends State<ClinicProfilePage> {
                 }
                 return Column(
                   children: snapshot.data!.docs.map((document) {
+
                     if (document["status"] == "available") {
                       _flag = false;
                     }
@@ -110,6 +111,7 @@ class _ClinicProfilePageState extends State<ClinicProfilePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ElevatedButton(
+
                             child: Text(_flag ? 'Unavailable' : 'available'),
                             onPressed: () async {
                               await changeStatus();
