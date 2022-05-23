@@ -1,4 +1,5 @@
 // import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,6 +22,21 @@ class ClinicProfilePage extends StatefulWidget {
 
 class _ClinicProfilePageState extends State<ClinicProfilePage> {
   final auth = FirebaseAuth.instance;
+  bool _flag = true;
+
+  Future<void> changeStatus() async {
+    final snapShot = await FirebaseFirestore.instance
+        .collection('Doctor')
+        .doc(auth.currentUser!.uid);
+
+    if (_flag) {
+      snapShot.update({"status": "avaliable"});
+    } else {
+      snapShot.update({"status": "unavaliable"});
+    }
+
+    _flag = !_flag;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +64,56 @@ class _ClinicProfilePageState extends State<ClinicProfilePage> {
           DoctorStatWidget(),
           const SizedBox(height: 48),
           DoctorDescriptionWidget(),
-          ButtonWidget(
-            text: 'Button for Tee',
-            onClicked: () {},
-          ),
+          StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection("Doctor")
+                  .where('doctorID', isEqualTo: auth.currentUser!.uid)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return Column(
+                  children: snapshot.data!.docs.map((document) {
+                    if (document["status"] == "avaliable") {
+                      _flag = false;
+                    }
+                    return Container(
+                      padding: EdgeInsets.symmetric(horizontal: 48),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ElevatedButton(
+                            child: Text(_flag ? 'Unavaliable' : 'Avaliable'),
+                            onPressed: () async {
+                              await changeStatus();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: _flag
+                                  ? Colors.red
+                                  : Colors.teal, // This is what you need!
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                );
+
+                // return ElevatedButton(
+                //   child: Text(_flag ? 'Red' : 'Green'),
+                //   onPressed: () {
+                //     setState(() => _flag = !_flag);
+                //   },
+                //   style: ElevatedButton.styleFrom(
+                //     primary: _flag
+                //         ? Colors.red
+                //         : Colors.teal, // This is what you need!
+                //   ),
+                // );
+              }),
         ],
       ),
     );
