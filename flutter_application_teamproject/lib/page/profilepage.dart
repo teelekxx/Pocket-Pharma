@@ -1,4 +1,5 @@
 // import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_application_teamproject/widget/user_widget.dart';
 import 'package:flutter_application_teamproject/widget/stat_widget.dart';
 import 'package:flutter_application_teamproject/widget/profile_widget.dart';
 import 'package:flutter_application_teamproject/widget/prescription_widget.dart';
+import '../data/user.dart';
 import '../widget/secondstat_widget.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -22,10 +24,11 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final auth = FirebaseAuth.instance;
+  bool isPic = true;
 
   @override
   Widget build(BuildContext context) {
-    final users = UserPreferences.getUser();
+    Users? users = UserPreferences.getUser();
 
     return Scaffold(
       appBar: buildAppBar(context),
@@ -33,15 +36,44 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: EdgeInsets.symmetric(horizontal: 22),
         physics: BouncingScrollPhysics(),
         children: [
-          ProfileWidget(
-            imagePath: users.imagePath,
-            onClicked: () async {
-              await Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => EditProfilePage()),
-              );
-              setState(() {});
-            },
-          ),
+          StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection("Profile")
+                  .where('user_id', isEqualTo: auth.currentUser!.uid)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return Column(
+                  children: snapshot.data!.docs.map((document) {
+                    users = UserPreferences.getUser();
+                    users = users?.copy(name: document["name"]);
+                    users = users?.copy(weight: document["weight"]);
+                    users = users?.copy(height: document["height"]);
+                    users = users?.copy(age: document["age"]);
+                    users = users?.copy(allergy: document["allergy"]);
+                    users = users?.copy(
+                        medicalcondition: document["medicalcondition"]);
+                    users = users?.copy(blood: document["blood"]);
+                    users = users?.copy(about: document["description"]);
+                    users = users?.copy(imagePath: document["picture"]);
+                    UserPreferences.setUser(users!);
+                    return ProfileWidget(
+                      imagePath: document["picture"],
+                      onClicked: () async {
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => EditProfilePage()),
+                        );
+                        setState(() {});
+                      },
+                    );
+                  }).toList(),
+                );
+              }),
           const SizedBox(height: 24),
           UserWidget(),
           const SizedBox(height: 24),
@@ -61,3 +93,13 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
+// ProfileWidget(
+//                     imagePath: isPic ? users.imagePath : ,
+//                     onClicked: () async {
+//                       await Navigator.of(context).push(
+//                         MaterialPageRoute(builder: (context) => EditProfilePage()),
+//                       );
+//                       setState(() {});
+//                     },
+//                   ),

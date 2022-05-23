@@ -315,6 +315,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 'medicalcondition': '',
                                                 'weight': '',
                                                 'user_id': user?.uid,
+                                                'picture':
+                                                    "https://www.baxterip.com.au/wp-content/uploads/2019/02/anonymous.jpg"
                                               });
                                               formkey.currentState?.reset();
                                               Navigator.push(context,
