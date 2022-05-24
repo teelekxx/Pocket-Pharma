@@ -25,6 +25,15 @@ class _AppointmentPageState extends State<AppointmentPage> {
     return qn.docs;
   }
 
+  Future getPicture(uid) async {
+    var firestore = FirebaseFirestore.instance;
+    QuerySnapshot qn = await firestore
+        .collection("Doctor")
+        .where("ownerID", isEqualTo: uid)
+        .get();
+    return qn.docs;
+  }
+
   navigateTodetail(DocumentSnapshot post) {
     Navigator.push(
         context,
@@ -34,27 +43,21 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 )));
   }
 
-  RoundedRectangleBorder myRoundedborder() {
-    return RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: BorderSide(color: Colors.black, width: 5));
+  RoundedRectangleBorder myRoundedborder(color) {
+    return RoundedRectangleBorder(side: BorderSide(color: color, width: 1));
   }
 
-  RoundedRectangleBorder myRoundedborderpending() {
-    return RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: BorderSide(color: Colors.black, width: 5));
+  RoundedRectangleBorder myRoundedborderpending(color) {
+    return RoundedRectangleBorder(side: BorderSide(color: color, width: 1));
   }
 
-  RoundedRectangleBorder myRoundedborderaccept() {
-    return RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: BorderSide(color: Colors.black, width: 5));
+  RoundedRectangleBorder myRoundedborderaccept(color) {
+    return RoundedRectangleBorder(side: BorderSide(color: color, width: 1));
   }
 
   CircleAvatar myCircleAvatar() {
     return CircleAvatar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue,
         radius: 30,
         child: FittedBox(
           child: Icon(
@@ -66,7 +69,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   CircleAvatar myCircleAvatarpending() {
     return CircleAvatar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.yellow,
         radius: 30,
         child: FittedBox(
           child: Icon(
@@ -105,24 +108,23 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 String request = snapshot.data[index].data()['status'];
                 if (snapshot.data[index].data()["ownerID"] == userID &&
                     snapshot.data[index].data()["status"] == "pending") {
-                  print(request);
                   return Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Ink(
                       // height: 100,
-                      color: (request == "pending")
-                          ? Colors.black12
-                          : Colors.black26,
+                      color: Theme.of(context).primaryColorLight,
                       child: ListTile(
                         // dense: true,
                         focusColor: Colors.black,
                         shape: (request == "pending")
-                            ? myRoundedborderpending()
-                            : myRoundedborder(),
+                            ? myRoundedborderpending(
+                                Theme.of(context).primaryColor)
+                            : myRoundedborder(Theme.of(context).primaryColor),
                         leading: (request == "pending")
                             ? myCircleAvatarpending()
                             : myCircleAvatar(),
-                        title: Text(snapshot.data[index].data()["doctorName"]),
+                        title: Text(snapshot.data[index].data()["doctorName"],
+                            style: Theme.of(context).textTheme.headline3),
                         subtitle: Text(d.toString()),
                         contentPadding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -170,23 +172,22 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   if (snapshot.data[index].data()["ownerID"] == userID &&
                       snapshot.data[index].data()["status"] != "pending" &&
                       snapshot.data[index].data()["status"] != "reject") {
-                    print(request);
+
                     return Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Ink(
-                        color: (request == "Accept")
-                            ? Colors.black12
-                            : Colors.black26,
+                        color: Theme.of(context).primaryColorLight,
                         child: ListTile(
                           focusColor: Colors.black,
                           shape: (request == "Accept")
-                              ? myRoundedborderaccept()
-                              : myRoundedborder(),
+                              ? myRoundedborderaccept(
+                                  Theme.of(context).primaryColor)
+                              : myRoundedborder(Theme.of(context).primaryColor),
                           leading: (request == "Accept")
                               ? myCircleAvataraccept()
                               : myCircleAvatar(),
-                          title:
-                              Text(snapshot.data[index].data()["doctorName"]),
+                          title: Text(snapshot.data[index].data()["doctorName"],
+                              style: Theme.of(context).textTheme.headline3),
                           subtitle: Text(d.toString()),
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10, horizontal: 10),
@@ -210,27 +211,23 @@ class _AppointmentPageState extends State<AppointmentPage> {
   Widget textpending() {
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 4),
+          // border: Border.all(color: Colors.black, width: 4),
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(20)),
       padding: const EdgeInsets.all(15.0),
       child: Text(
         'Pending Appointment',
-        style: TextStyle(fontSize: 30),
+        style: Theme.of(context).textTheme.headline1,
       ),
     );
   }
 
   Widget textshowappointment() {
     return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 4),
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(20)),
       padding: const EdgeInsets.all(15.0),
       child: Text(
-        'Accept Appointment',
-        style: TextStyle(fontSize: 30),
+        'Accepted Appointment',
+        style: Theme.of(context).textTheme.headline1,
       ),
     );
   }
@@ -285,8 +282,7 @@ class _DetailPageState extends State<DetailPage> {
         child: Container(
       width: 360,
       height: 500,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15), color: Colors.black87),
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
       child: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(8.0),

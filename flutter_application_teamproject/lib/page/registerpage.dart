@@ -46,9 +46,9 @@ class _RegisterPageState extends State<RegisterPage> {
               body: Container(
                   height: 700,
                   decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/bg.png"),
-                          fit: BoxFit.cover)
+                      // image: DecorationImage(
+                      //     image: AssetImage("assets/images/bg.png"),
+                      //     fit: BoxFit.cover)
                       //  borderRadius: BorderRadius.circular(20),
                       //  color: Colors.blue[100] ,
                       //  border: Border.all(
@@ -68,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Image.asset(
-                                    "assets/images/pocketphamaw.png",
+                                    "assets/images/doctorphama.png",
                                     height: 100),
                               ),
                               Text("Email", style: TextStyle(fontSize: 18)),
@@ -90,21 +90,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                     filled: true,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: const BorderSide(width: 1),
-                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(width: 3),
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: const BorderSide(
+                                          width: 3, color: Colors.blue),
                                     ),
                                     errorBorder: new OutlineInputBorder(
                                       borderSide: const BorderSide(
                                           color: Colors.red, width: 1),
-                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     focusedErrorBorder: new OutlineInputBorder(
                                       borderSide: const BorderSide(
                                           color: Colors.red, width: 3),
-                                      borderRadius: BorderRadius.circular(10),
                                     )),
                                 keyboardType: TextInputType.emailAddress,
                                 onSaved: (String? email) {
@@ -128,21 +125,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                     filled: true,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: const BorderSide(width: 1),
-                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(width: 3),
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: const BorderSide(
+                                          width: 3, color: Colors.blue),
                                     ),
                                     errorBorder: new OutlineInputBorder(
                                       borderSide: const BorderSide(
                                           color: Colors.red, width: 1),
-                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     focusedErrorBorder: new OutlineInputBorder(
                                       borderSide: const BorderSide(
                                           color: Colors.red, width: 3),
-                                      borderRadius: BorderRadius.circular(10),
                                     )),
                                 obscureText: true,
                                 onSaved: (String? password) {
@@ -173,21 +167,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                     errorStyle: TextStyle(color: Colors.red),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: const BorderSide(width: 1),
-                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(width: 3),
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: const BorderSide(
+                                          width: 3, color: Colors.blue),
                                     ),
                                     errorBorder: new OutlineInputBorder(
                                       borderSide: const BorderSide(
                                           color: Colors.red, width: 1),
-                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     focusedErrorBorder: new OutlineInputBorder(
                                       borderSide: const BorderSide(
                                           color: Colors.red, width: 3),
-                                      borderRadius: BorderRadius.circular(10),
                                     )),
                                 obscureText: true,
                               ),
@@ -207,21 +198,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                     filled: true,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: const BorderSide(width: 1),
-                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(width: 3),
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: const BorderSide(
+                                          width: 3, color: Colors.blue),
                                     ),
                                     errorBorder: new OutlineInputBorder(
                                       borderSide: const BorderSide(
                                           color: Colors.red, width: 1),
-                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     focusedErrorBorder: new OutlineInputBorder(
                                       borderSide: const BorderSide(
                                           color: Colors.red, width: 3),
-                                      borderRadius: BorderRadius.circular(10),
                                     )),
                                 onSaved: (String? iname) {
                                   fname = iname!;
@@ -243,21 +231,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                     filled: true,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: const BorderSide(width: 1),
-                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(width: 3),
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: const BorderSide(
+                                          width: 3, color: Colors.blue),
                                     ),
                                     errorBorder: new OutlineInputBorder(
                                       borderSide: const BorderSide(
                                           color: Colors.red, width: 1),
-                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     focusedErrorBorder: new OutlineInputBorder(
                                       borderSide: const BorderSide(
                                           color: Colors.red, width: 3),
-                                      borderRadius: BorderRadius.circular(10),
                                     )),
                                 onSaved: (String? iname) {
                                   lname = iname!;
@@ -273,14 +258,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                       width: 120,
                                       height: 50,
                                       child: ElevatedButton(
-                                        child: Text("Sign in"),
+                                        child: Text("Sign in",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6),
                                         style: ElevatedButton.styleFrom(
-                                            primary: Colors.black,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18.0),
-                                                side: BorderSide(
-                                                    color: Colors.black87))),
+                                          primary:
+                                              Theme.of(context).primaryColor,
+                                        ),
                                         onPressed: () async {
                                           if (formkey.currentState!
                                               .validate()) {

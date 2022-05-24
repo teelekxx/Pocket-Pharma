@@ -54,12 +54,12 @@ class SecondStatWidget extends StatelessWidget {
           children: <Widget>[
             Text(
               value,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 2),
             Text(
               text,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              // style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
         ),

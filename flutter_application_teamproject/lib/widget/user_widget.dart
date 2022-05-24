@@ -27,12 +27,12 @@ class UserWidget extends StatelessWidget {
               children: [
                 Text(
                   name!,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  // style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   "${auth.currentUser!.email}",
-                  style: TextStyle(color: Colors.grey),
+                  // style: TextStyle(color: Colors.grey),
                 )
               ],
             );

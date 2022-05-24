@@ -32,27 +32,21 @@ class _ClinicAppointmnetPageState extends State<ClinicAppointmnetPage> {
                 )));
   }
 
-  RoundedRectangleBorder myRoundedborder() {
-    return RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: BorderSide(color: Colors.black, width: 5));
+  RoundedRectangleBorder myRoundedborder(color) {
+    return RoundedRectangleBorder(side: BorderSide(color: color, width: 1));
   }
 
-  RoundedRectangleBorder myRoundedborderpending() {
-    return RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: BorderSide(color: Colors.black, width: 5));
+  RoundedRectangleBorder myRoundedborderpending(color) {
+    return RoundedRectangleBorder(side: BorderSide(color: color, width: 1));
   }
 
-  RoundedRectangleBorder myRoundedborderaccept() {
-    return RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: BorderSide(color: Colors.black, width: 5));
+  RoundedRectangleBorder myRoundedborderaccept(color) {
+    return RoundedRectangleBorder(side: BorderSide(color: color, width: 1));
   }
 
   CircleAvatar myCircleAvatar() {
     return CircleAvatar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue,
         radius: 30,
         child: FittedBox(
           child: Icon(
@@ -64,7 +58,7 @@ class _ClinicAppointmnetPageState extends State<ClinicAppointmnetPage> {
 
   CircleAvatar myCircleAvatarpending() {
     return CircleAvatar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.yellow,
         radius: 30,
         child: FittedBox(
           child: Icon(
@@ -114,19 +108,19 @@ class _ClinicAppointmnetPageState extends State<ClinicAppointmnetPage> {
                     padding: const EdgeInsets.all(10.0),
                     child: Ink(
                       // height: 100,
-                      color: (request == "pending")
-                          ? Colors.black12
-                          : Colors.black26,
+                      color: Colors.white,
                       child: ListTile(
                         // dense: true,
                         focusColor: Colors.black,
                         shape: (request == "pending")
-                            ? myRoundedborderpending()
-                            : myRoundedborder(),
+                            ? myRoundedborderpending(
+                                Theme.of(context).primaryColor)
+                            : myRoundedborder(Theme.of(context).primaryColor),
                         leading: (request == "pending")
                             ? myCircleAvatarpending()
                             : myCircleAvatar(),
-                        title: Text(appointmnet["ownerName"]),
+                        title: Text(appointmnet["ownerName"],
+                            style: Theme.of(context).textTheme.headline3),
                         subtitle: Text(d.toString()),
                         contentPadding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -284,10 +278,8 @@ class _ClinicAppointmnetPageState extends State<ClinicAppointmnetPage> {
                       child: ElevatedButton(
                           child: Text("Comfirm"),
                           style: ElevatedButton.styleFrom(
-                              primary: Colors.black,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                  side: BorderSide(color: Colors.black87))),
+                            primary: Colors.black,
+                          ),
                           onPressed: () {
                             FirebaseFirestore.instance
                                 .collection('prescription')
@@ -356,18 +348,18 @@ class _ClinicAppointmnetPageState extends State<ClinicAppointmnetPage> {
                     return Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Ink(
-                        color: (request == "Accept")
-                            ? Colors.black12
-                            : Colors.black26,
+                        color: Colors.white,
                         child: ListTile(
                           focusColor: Colors.black,
                           shape: (request == "Accept")
-                              ? myRoundedborderaccept()
-                              : myRoundedborder(),
+                              ? myRoundedborderaccept(
+                                  Theme.of(context).primaryColor)
+                              : myRoundedborder(Theme.of(context).primaryColor),
                           leading: (request == "Accept")
                               ? myCircleAvataraccept()
                               : myCircleAvatar(),
-                          title: Text(userName),
+                          title: Text(userName,
+                              style: Theme.of(context).textTheme.headline3),
                           subtitle: Text(d.toString()),
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10, horizontal: 10),
@@ -423,10 +415,7 @@ class _ClinicAppointmnetPageState extends State<ClinicAppointmnetPage> {
     return Container(
       margin: const EdgeInsets.all(15.0),
       // padding: const EdgeInsets.all(3.0),
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 4),
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(20)),
+
       padding: const EdgeInsets.all(15.0),
       child: Text(
         'Patient Request',
@@ -439,10 +428,7 @@ class _ClinicAppointmnetPageState extends State<ClinicAppointmnetPage> {
     return Container(
       margin: const EdgeInsets.all(15.0),
       // padding: const EdgeInsets.all(3.0),
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 4),
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(20)),
+
       padding: const EdgeInsets.all(15.0),
       child: Text(
         'Patient Appointment',
