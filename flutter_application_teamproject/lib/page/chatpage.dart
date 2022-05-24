@@ -24,6 +24,15 @@ class _AppointmentPageState extends State<AppointmentPage> {
     return qn.docs;
   }
 
+  Future getPicture(uid) async {
+    var firestore = FirebaseFirestore.instance;
+    QuerySnapshot qn = await firestore
+        .collection("Doctor")
+        .where("ownerID", isEqualTo: uid)
+        .get();
+    return qn.docs;
+  }
+
   navigateTodetail(DocumentSnapshot post) {
     Navigator.push(
         context,
@@ -272,8 +281,7 @@ class _DetailPageState extends State<DetailPage> {
         child: Container(
       width: 360,
       height: 500,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15), color: Colors.black87),
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
       child: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
