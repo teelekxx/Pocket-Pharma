@@ -28,12 +28,12 @@ class DescriptionWidget extends StatelessWidget {
                 children: [
                   Text(
                     'Profile Description',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     document["description"],
-                    style: TextStyle(fontSize: 16, height: 1.4),
+                    // style: TextStyle(fontSize: 16, height: 1.4),
                   ),
                 ],
               ),

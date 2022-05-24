@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:animated_theme_switcher/animated_theme_switcher.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_application_teamproject/page/startpage.dart';
 // import 'package:flutter_application_teamproject/themes.dart';
 import 'package:flutter_application_teamproject/utils/user_preferences.dart';
 import 'package:dcdg/dcdg.dart';
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
@@ -27,19 +30,35 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
+        primaryColor: Colors.black,
+        primaryColorLight: Colors.white,
         primarySwatch: Colors.blue,
+        textTheme: TextTheme(
+          headline1: TextStyle(
+              fontSize: 30.0, fontWeight: FontWeight.bold, color: Colors.black),
+          headline3: TextStyle(
+            fontSize: 20.0,
+            color: Colors.black,
+          ),
+          headline4: TextStyle(
+            fontSize: 14.0,
+            color: Colors.white,
+          ),
+          headline5: TextStyle(
+            fontSize: 24.0,
+            color: Colors.black,
+          ),
+          headline6: TextStyle(
+            fontSize: 20.0,
+            color: Colors.white,
+          ),
+          bodyText2: TextStyle(
+            fontSize: 14.0,
+            color: Colors.black,
+          ),
+        ),
       ),
       home: HomePage(),
     );
   }
 }
-
