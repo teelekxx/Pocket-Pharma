@@ -14,6 +14,7 @@ import 'package:flutter_application_teamproject/widget/user_widget.dart';
 import 'package:flutter_application_teamproject/widget/stat_widget.dart';
 import 'package:flutter_application_teamproject/widget/profile_widget.dart';
 import 'package:flutter_application_teamproject/widget/prescription_widget.dart';
+import 'package:flutter_application_teamproject/page/video_call_screen.dart';
 import '../data/user.dart';
 import '../widget/secondstat_widget.dart';
 
@@ -31,7 +32,14 @@ class _ProfilePageState extends State<ProfilePage> {
     Users? users = UserPreferences.getUser();
 
     return Scaffold(
-      appBar: buildAppBar(context),
+      appBar: AppBar(title: const Text('ProfileEIEI'), actions: [
+        IconButton(
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const VideoCallScreen()),
+          ),
+          icon: const Icon(Icons.video_camera_front),
+        ),
+      ]),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 22),
         physics: BouncingScrollPhysics(),
