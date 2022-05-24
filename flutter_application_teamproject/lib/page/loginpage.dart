@@ -16,30 +16,26 @@ class _LoginPageState extends State<LoginPage> {
   final formkey = GlobalKey<FormState>();
   Profile profile = Profile(email: '', password: '');
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
-  
+
   @override
   OutlineInputBorder myfocusborder() {
     return OutlineInputBorder(
-      borderRadius: new BorderRadius.circular(16),
       borderSide: const BorderSide(color: Colors.blue, width: 3),
     );
   }
 
   OutlineInputBorder myinputborder() {
     return OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Colors.black38, width: 3));
+        borderSide: const BorderSide(color: Colors.black, width: 1));
   }
 
   OutlineInputBorder myfocuserrorborder() {
     return OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(16),
         borderSide: const BorderSide(color: Colors.red, width: 3));
   }
 
   OutlineInputBorder myerrorborder() {
     return OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(16),
         borderSide: const BorderSide(color: Colors.red, width: 1));
   }
 
@@ -68,9 +64,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: Container(
                   height: 1000,
                   decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/bg2login.png"),
-                          fit: BoxFit.cover)
+                      // image: DecorationImage(
+                      //     image: AssetImage("assets/images/bg2login.png"),
+                      //     fit: BoxFit.cover)
                       //  borderRadius: BorderRadius.circular(20),
                       //  color: Colors.blue[100] ,
                       //  border: Border.all(
@@ -98,7 +94,8 @@ class _LoginPageState extends State<LoginPage> {
                                 Wrap(children: [
                                   Icon(Icons.email),
                                   Text("  Email",
-                                      style: TextStyle(fontSize: 20))
+                                      style:
+                                          Theme.of(context).textTheme.headline3)
                                 ]),
                                 Container(
                                   child: TextFormField(
@@ -129,7 +126,8 @@ class _LoginPageState extends State<LoginPage> {
                                 Wrap(children: [
                                   Icon(Icons.lock),
                                   Text("  Password",
-                                      style: TextStyle(fontSize: 20))
+                                      style:
+                                          Theme.of(context).textTheme.headline3)
                                 ]),
                                 TextFormField(
                                   decoration: InputDecoration(
@@ -154,15 +152,14 @@ class _LoginPageState extends State<LoginPage> {
                                         width: 120,
                                         height: 50,
                                         child: ElevatedButton(
-                                          child: Text("Sign in"),
+                                          child: Text("Sign in",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6),
                                           style: ElevatedButton.styleFrom(
-                                              primary: Colors.black,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          18.0),
-                                                  side: BorderSide(
-                                                      color: Colors.black87))),
+                                            primary:
+                                                Theme.of(context).primaryColor,
+                                          ),
                                           onPressed: () async {
                                             if (formkey.currentState!
                                                 .validate()) {
@@ -179,7 +176,6 @@ class _LoginPageState extends State<LoginPage> {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) {
-                                                    
                                                     return WelcomePage();
                                                   }));
                                                 });
@@ -199,7 +195,9 @@ class _LoginPageState extends State<LoginPage> {
                                     child: Row(children: [
                                       Text(
                                         "Don't have an account?,",
-                                        style: TextStyle(fontSize: 20),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3,
                                       ),
                                       TextButton(
                                           onPressed: () {

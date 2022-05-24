@@ -137,12 +137,11 @@ class _MainPageState extends State<MainPage> {
                         width: 100,
                         height: 50,
                         child: ElevatedButton(
-                            child: Text("Next"),
+                            child: Text("Next",
+                                style: Theme.of(context).textTheme.headline4),
                             style: ElevatedButton.styleFrom(
-                                primary: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.black87))),
+                              primary: Theme.of(context).primaryColor,
+                            ),
                             onPressed: () {
                               _selectDate(context);
                             }))
@@ -158,10 +157,10 @@ class _MainPageState extends State<MainPage> {
           child: Container(
               height: 1000,
               width: 500,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/bg2login.png"),
-                      fit: BoxFit.cover)),
+              // decoration: BoxDecoration(
+              //     image: DecorationImage(
+              //         image: AssetImage("assets/images/bg2login.png"),
+              //         fit: BoxFit.cover)),
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection("Doctor")
@@ -194,7 +193,8 @@ class _MainPageState extends State<MainPage> {
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
-                                      color: Colors.black, spreadRadius: 1),
+                                      color: Theme.of(context).primaryColor,
+                                      spreadRadius: 1),
                                 ],
                               ),
                               margin: EdgeInsets.all(20),
@@ -269,18 +269,17 @@ class _MainPageState extends State<MainPage> {
                                                     width: 100,
                                                     height: 50,
                                                     child: ElevatedButton(
-                                                        child: Text("Appoint"),
-                                                        style: ElevatedButton.styleFrom(
-                                                            primary:
-                                                                Colors.black,
-                                                            shape: RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            18.0),
-                                                                side: BorderSide(
-                                                                    color: Colors
-                                                                        .black87))),
+                                                        child: Text("Appoint",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline4),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                        ),
                                                         onPressed: () {
                                                           if (document[
                                                                   "status"] ==
