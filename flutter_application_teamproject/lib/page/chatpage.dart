@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_application_teamproject/page/video_call_screen.dart';
 // import 'package:flutter_application_teamproject/model/information.dart';
 // import 'package:http/http.dart';
 
@@ -171,6 +172,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   if (snapshot.data[index].data()["ownerID"] == userID &&
                       snapshot.data[index].data()["status"] != "pending" &&
                       snapshot.data[index].data()["status"] != "reject") {
+
                     return Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Ink(
@@ -410,9 +412,15 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget displaytest() {
-    return Text(
-      "show pending Appointment",
-      style: TextStyle(fontSize: 100),
+    if (widget.post["status"] == "pending" ||
+        widget.post["status"] == "Success") {
+      return Text("");
+    }
+    return IconButton(
+      onPressed: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const VideoCallScreen()),
+      ),
+      icon: const Icon(Icons.video_camera_front),
     );
   }
 

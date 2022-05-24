@@ -32,7 +32,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         onWillPop: () async => false,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Video Call'),
+            title: const Text('Call In Progress'),
           ),
           body: SafeArea(
             child: Stack(

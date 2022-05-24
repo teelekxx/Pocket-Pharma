@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_application_teamproject/page/video_call_screen.dart';
 
 class ClinicAppointmnetPage extends StatefulWidget {
   @override
@@ -653,9 +654,15 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   Widget displaytest() {
-    return Text(
-      "show pending Appointment",
-      style: TextStyle(fontSize: 100),
+    if (widget.post["status"] == "pending" ||
+        widget.post["status"] == "Success") {
+      return Text("");
+    }
+    return IconButton(
+      onPressed: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const VideoCallScreen()),
+      ),
+      icon: const Icon(Icons.video_camera_front),
     );
   }
 
