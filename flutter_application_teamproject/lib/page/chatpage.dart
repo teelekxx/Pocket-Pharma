@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_application_teamproject/page/video_call_screen.dart';
 // import 'package:flutter_application_teamproject/model/information.dart';
 // import 'package:http/http.dart';
 
@@ -166,36 +167,35 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   DateTime d = t.toDate();
                   String request = snapshot.data[index].data()['status'];
 
-                  if(snapshot.data[index].data()["ownerID"]==userID && snapshot.data[index].data()["status"]!="pending" && snapshot.data[index].data()["status"]!="reject"){ 
-                    print(request);    
-                      return 
-                     Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Ink(
-                          color:
-                         (request=="Accept")?
-                          Colors.black12
-                          :Colors.black26,
-                            child: ListTile(
-                            focusColor: Colors.black,
-                             shape:
-                              (request=="Accept")?
-                              myRoundedborderaccept()
-                              :myRoundedborder()
-                             ,
-                              leading:
-                              (request=="Accept")?
-                              myCircleAvataraccept()
-                              :myCircleAvatar(),
-                            title:Text(snapshot.data[index].data()["doctorName"]),      
-                            subtitle: Text(d.toString()),
-                            contentPadding: EdgeInsets.symmetric(vertical:10,horizontal: 10),
-                            trailing:  Wrap(spacing: 12,
-                            ),
-                            onTap: ()=> navigateTodetail(snapshot.data[index]),
+                  if (snapshot.data[index].data()["ownerID"] == userID &&
+                      snapshot.data[index].data()["status"] != "pending" &&
+                      snapshot.data[index].data()["status"] != "reject") {
+                    print(request);
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Ink(
+                        color: (request == "Accept")
+                            ? Colors.black12
+                            : Colors.black26,
+                        child: ListTile(
+                          focusColor: Colors.black,
+                          shape: (request == "Accept")
+                              ? myRoundedborderaccept()
+                              : myRoundedborder(),
+                          leading: (request == "Accept")
+                              ? myCircleAvataraccept()
+                              : myCircleAvatar(),
+                          title:
+                              Text(snapshot.data[index].data()["doctorName"]),
+                          subtitle: Text(d.toString()),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          trailing: Wrap(
+                            spacing: 12,
                           ),
+                          onTap: () => navigateTodetail(snapshot.data[index]),
                         ),
-                      
+                      ),
                     );
                   } else {
                     return Center(
@@ -416,9 +416,15 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget displaytest() {
-    return Text(
-      "show pending Appointment",
-      style: TextStyle(fontSize: 100),
+    if (widget.post["status"] == "pending" ||
+        widget.post["status"] == "Success") {
+      return Text("");
+    }
+    return IconButton(
+      onPressed: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const VideoCallScreen()),
+      ),
+      icon: const Icon(Icons.video_camera_front),
     );
   }
 
