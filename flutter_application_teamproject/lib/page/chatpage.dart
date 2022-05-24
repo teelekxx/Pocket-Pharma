@@ -42,19 +42,16 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 )));
   }
 
-  RoundedRectangleBorder myRoundedborder() {
-    return RoundedRectangleBorder(
-        side: BorderSide(color: Colors.black, width: 1));
+  RoundedRectangleBorder myRoundedborder(color) {
+    return RoundedRectangleBorder(side: BorderSide(color: color, width: 1));
   }
 
-  RoundedRectangleBorder myRoundedborderpending() {
-    return RoundedRectangleBorder(
-        side: BorderSide(color: Colors.black, width: 1));
+  RoundedRectangleBorder myRoundedborderpending(color) {
+    return RoundedRectangleBorder(side: BorderSide(color: color, width: 1));
   }
 
-  RoundedRectangleBorder myRoundedborderaccept() {
-    return RoundedRectangleBorder(
-        side: BorderSide(color: Colors.black, width: 1));
+  RoundedRectangleBorder myRoundedborderaccept(color) {
+    return RoundedRectangleBorder(side: BorderSide(color: color, width: 1));
   }
 
   CircleAvatar myCircleAvatar() {
@@ -119,8 +116,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         // dense: true,
                         focusColor: Colors.black,
                         shape: (request == "pending")
-                            ? myRoundedborderpending()
-                            : myRoundedborder(),
+                            ? myRoundedborderpending(
+                                Theme.of(context).primaryColor)
+                            : myRoundedborder(Theme.of(context).primaryColor),
                         leading: (request == "pending")
                             ? myCircleAvatarpending()
                             : myCircleAvatar(),
@@ -180,8 +178,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         child: ListTile(
                           focusColor: Colors.black,
                           shape: (request == "Accept")
-                              ? myRoundedborderaccept()
-                              : myRoundedborder(),
+                              ? myRoundedborderaccept(
+                                  Theme.of(context).primaryColor)
+                              : myRoundedborder(Theme.of(context).primaryColor),
                           leading: (request == "Accept")
                               ? myCircleAvataraccept()
                               : myCircleAvatar(),
