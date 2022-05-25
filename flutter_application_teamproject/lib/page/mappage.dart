@@ -30,6 +30,7 @@ class _MapPageState extends State<MapPage> {
   final _textcontroller = TextEditingController(text: "");
   Set<Marker> markers = Set();
   double lat = 0, lng = 0, distance = 0;
+  double lats = 0, lngs = 0;
   var data;
   void initState() {
     super.initState();
@@ -42,9 +43,13 @@ class _MapPageState extends State<MapPage> {
   Future<Null> findLatLng() async {
     LocationData? locationData = await findLocationData();
     setState(() {
-      lat = locationData!.latitude!;
-      lng = locationData.longitude!;
+      lats = locationData!.latitude!;
+      lngs = locationData.longitude!;
     });
+    // setState(() {
+    lat =lats;
+    lng =lngs;
+    
     print("Hi lat =${lat}, lng =${lng}");
   }
 
@@ -73,6 +78,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   Widget showMapProgress() {
+    print("NO NO NO");
     return Center(
       child: CircularProgressIndicator(),
     );
