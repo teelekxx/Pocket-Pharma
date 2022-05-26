@@ -249,7 +249,7 @@ class _ClinicAppointmnetPageState extends State<ClinicAppointmnetPage> {
                     Text(" Age: ${userage}", style: TextStyle(fontSize: 20)),
                     Text(" Allergy: ${allergy}",
                         style: TextStyle(fontSize: 20)),
-                    Text(" Weight nad Height: ${userWeight} , ${userHeight}",
+                    Text(" Weight & Height: ${userWeight} , ${userHeight}",
                         style: TextStyle(fontSize: 20)),
                     SizedBox(
                       height: 30,
