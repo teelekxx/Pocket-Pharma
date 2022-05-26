@@ -27,7 +27,7 @@ class PrescriptionWidget extends StatelessWidget {
               child: ListTile(
                 title: Text(document["createBy"]),
                 subtitle: Text("Prescriptions: \n- " +
-                    document["rxPrescription"] +
+                    document["rxPrescription"] + "\n" +
                     "Suggestions: \n- " +
                     document["suggestion"] +
                     "\n"
