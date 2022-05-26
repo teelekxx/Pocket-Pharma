@@ -28,6 +28,8 @@ class PrescriptionWidget extends StatelessWidget {
                 title: Text(document["createBy"]),
                 subtitle: Text("Prescriptions: \n- " +
                     document["rxPrescription"] +
+                    "Suggestions: \n- " +
+                    document["suggestion"] +
                     "\n"
                         "Phone: " +
                     document["phone"] +

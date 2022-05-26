@@ -1,5 +1,7 @@
 // import 'dart:html';
 
+// ignore_for_file: prefer_const_constructors
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -220,6 +222,7 @@ class _ClinicAppointmnetPageState extends State<ClinicAppointmnetPage> {
       String userWeight,
       String userHeight) async {
     var textController = TextEditingController();
+    var textController2 = TextEditingController();
     DateTime currentphonedate = DateTime.now();
     final String? des = await showDialog(
         context: context,
@@ -270,13 +273,34 @@ class _ClinicAppointmnetPageState extends State<ClinicAppointmnetPage> {
                       minLines: 1,
                     ),
                     SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      "Suggestion",
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                      controller: textController2,
+                      decoration: InputDecoration(
+                        hintText: 'Type here....',
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: 20,
+                      minLines: 1,
+                    ),
+                    SizedBox(
                       height: 50,
                     ),
                     SizedBox(
                       width: 100,
                       height: 50,
                       child: ElevatedButton(
-                          child: Text("Comfirm"),
+                          child: Text("Confirm"),
                           style: ElevatedButton.styleFrom(
                             primary: Colors.black,
                           ),
@@ -287,6 +311,7 @@ class _ClinicAppointmnetPageState extends State<ClinicAppointmnetPage> {
                               'createBy': doctorname,
                               // 'owner': uid,
                               'rxPrescription': textController.text,
+                              'suggestion': textController2.text,
                               // 'doctorName': selectedDoctor,
                               'dateTime': currentphonedate,
                               'patientID': userid,
