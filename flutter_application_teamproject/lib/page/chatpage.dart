@@ -172,7 +172,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   if (snapshot.data[index].data()["ownerID"] == userID &&
                       snapshot.data[index].data()["status"] != "pending" &&
                       snapshot.data[index].data()["status"] != "reject") {
-
                     return Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Ink(
@@ -291,10 +290,10 @@ class _DetailPageState extends State<DetailPage> {
             SizedBox(
               height: 20,
             ),
-            SizedBox(
-              height: 120,
-              width: 120,
-              child: const ColoredBox(color: Colors.grey),
+            Icon(
+              Icons.add_moderator_outlined,
+              color: Colors.white,
+              size: 80,
             ),
             SizedBox(
               height: 20,
